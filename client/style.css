@@ -1,0 +1,85 @@
+html {
+  /* font-size controls all sizes (1rem = 5px, 2rem = 10px) */
+  font-size: 5px;
+  --bg-color: #535353;
+  --nav-color: rgba(46, 46, 46, 1);
+  --bg-color: #535353;
+  --idle-color: rgba(50, 50, 50, 1);
+  --idle-outline-color: rgba(255, 255, 255, 0.25);
+  --hover-color: rgba(0, 102, 153, 1);
+  --hover-outline-color: rgba(255, 255, 255, 0.75);
+  --full-size: 2px;
+  background-color: var(--bg-color);
+}
+
+.content {
+  background-color: var(--nav-color);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 3rem 0px;
+}
+
+.colorPick {
+  position: relative;
+  left: 10%;
+  margin-top: -3rem;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.bounds {
+  padding: 2rem;
+  display: flex;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.box {
+  border: 1px solid var(--idle-outline-color);
+  background-color: var(--idle-color);
+  width: 6rem;
+  height: 6rem;
+  transition: border-width 100ms linear 20ms,
+     border-color 100ms linear 20ms,
+     background-color 100ms ease-in 0ms,
+     border-radius 150ms ease-in 20ms;
+}
+
+
+#foreground {
+  position: relative;
+  z-index: 1;
+  transition: border-width 100ms linear 20ms,
+     border-color 100ms linear 20ms,
+     background-color 100ms ease-in 0ms,
+     border-radius 150ms ease-in 20ms;
+}
+
+#background {
+  position: relative;
+  /* top: 18px; */
+  top: 16px;
+  left: -15px;
+  /* left: 16px; */
+  transition: border-width 100ms linear 20ms,
+    border-color 100ms linear 20ms,
+    background-color 100ms ease-in 0ms,
+    border-radius 120ms ease-in 20ms;
+}
+
+#foreground:hover, #background:hover {
+  cursor: pointer;
+  background-color: var(--hover-color);
+  border-color: var(--hover-outline-color);
+  border-radius: 3rem;
+}
+
+#foreground:active, #background:active {
+  background-color: white;
+}

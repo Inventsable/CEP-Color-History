@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionList>
+    <Extension Id="com.multi.app.panel">
+        <HostList>
+            <!-- <Host Name="PPRO" Port="8001"/> -->
+            <!-- <Host Name="AEFT" Port="8001"/> -->
+            <Host Name="ILST" Port="9999"/>
+            <Host Name="PHXS" Port="9999"/>
+        </HostList>
+    </Extension>
+</ExtensionList>
