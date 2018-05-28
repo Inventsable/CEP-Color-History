@@ -28,7 +28,7 @@
           <!-- 4) -->
           <MainPath>./client/index.html</MainPath>
           <!-- 5) -->
-          <ScriptPath>./host/index.jsx</ScriptPath>
+          <!-- <ScriptPath>./host/index.jsx</ScriptPath> -->
           <CEFCommandLine />
         </Resources>
         <Lifecycle>
@@ -39,11 +39,22 @@
           <!-- 6) -->
           <Menu>Multi App</Menu>
           <Geometry>
-            <Size>
-              <!-- 7) -->
-              <Height>100</Height>
+            <!-- <Size>
+              <Height>150</Height>
               <Width>140</Width>
+            </Size> -->
+            <Size>
+              <Height>300</Height>
+              <Width>30</Width>
             </Size>
+              <MinSize>
+                  <Height>120</Height>
+                  <Width>30</Width>
+              </MinSize>
+              <MaxSize>
+                  <Height>900</Height>
+                  <Width>200</Width>
+              </MaxSize>
           </Geometry>
           <Icons />
         </UI>

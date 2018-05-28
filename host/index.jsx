@@ -9,13 +9,13 @@
 
 
 //
-fromPS = function() {
-  colorFromPhotoshop();
-}
-
-fromAI = function() {
-  colorFromIllustrator();
-}
+// fromPS = function() {
+//   colorFromPhotoshop();
+// }
+//
+// fromAI = function() {
+//   colorFromIllustrator();
+// }
 
 // msgPS(variable);
 // colorFromPhotoshop()

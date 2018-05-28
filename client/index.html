@@ -4,19 +4,43 @@
     <!-- meta -->
     <meta charset="utf-8">
     <!-- style -->
+    <!-- <script src="//cdn.jsdelivr.net/sortable/latest/Sortable.min.js"></s‌​cript> -->
+    <!-- <link href="./style.css" type="text/css" rel="stylesheet"> -->
     <link href="./style.css" type="text/css" rel="stylesheet">
     <title>Multi-App Test</title>
   </head>
   <body>
   <div id="content" class="content">
-    <div class="colorPick">
+    <div id="nav" class="colorPick">
       <div class="bounds">
         <div id="foreground" class="box"></div>
-        <div id="background" class="box"></div>
+        <div id="background" class="box">
+          <div id="innerStroke" class="innerStroke"></div>
+        </div>
+      </div>
+      <div id="historyPick" class="historyPick">
+        <div id="backArea" class="backArea">
+          <div id="back_Arrow" class="triangleWE tri-left"></div>
+        </div>
+        <div id="forwardArea" class="forwardArea">
+          <div id="forward_Arrow" class="triangleWE tri-right"></div>
+        </div>
       </div>
     </div>
+    <div id="trimUp" class="trimUp">
+      <div id="trimUp_Arrow" class="triangleUD tri-down"></div>
+    </div>
+    <div id="listHold">
+    </div>
+    <div id="trimDown" class="trimDown">
+      <div id="trimDown_Arrow" class="triangleUD tri-up"></div>
+    </div>
   </div>
+	<script src="./lib/Sortable/sortable.js"></script>
   <script src="./CSInterface.js" type="text/javascript"></script>
+  <script src="./lib/cookies.js" type="text/javascript"></script>
+  <script src="./swatches2.js" type="text/javascript"></script>
   <script src="./main.js" type="text/javascript"></script>
+  <script src="./lib/flyoutmenu.js" type="text/javascript"></script>
   </body>
 </html>

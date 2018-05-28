@@ -1,7 +1,5 @@
 html {
-  /* font-size controls all sizes (1rem = 5px, 2rem = 10px) */
   font-size: 5px;
-  --bg-color: #535353;
   --nav-color: rgba(46, 46, 46, 1);
   --bg-color: #535353;
   --idle-color: rgba(50, 50, 50, 1);
@@ -12,29 +10,45 @@ html {
   background-color: var(--bg-color);
 }
 
+body {
+  background-color: var(--bg-color);
+  margin: 0px;
+  max-width: 60rem;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.cross {
+  display: block;
+  position: relative;
+  left: 2px;
+  bottom: 3px;
+  width: 0px;
+  height: 135%;
+  transform: rotate(45deg);
+  border: 1px solid transparent;
+  transition: border-color 100ms ease-in 0ms;
+}
+
 .content {
-  background-color: var(--nav-color);
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  margin: 3rem 0px;
+  flex-wrap: wrap;
 }
 
 .colorPick {
-  position: relative;
-  left: 10%;
-  margin-top: -3rem;
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-bottom: 10px;
-  padding-right: 10px;
+  width: 100%;
+  background-color: var(--nav-color);
+  padding: 10px;
   display: flex;
   justify-content: center;
 }
 
 .bounds {
-  padding: 2rem;
+  width: 4rem;
+  height: 4rem;
   display: flex;
   margin-bottom: 1rem;
   flex-wrap: wrap;
@@ -42,15 +56,15 @@ html {
 
 .box {
   border: 1px solid var(--idle-outline-color);
-  background-color: var(--idle-color);
-  width: 6rem;
-  height: 6rem;
-  transition: border-width 100ms linear 20ms,
-     border-color 100ms linear 20ms,
-     background-color 100ms ease-in 0ms,
-     border-radius 150ms ease-in 20ms;
+  background-color: var(--bg-color);
+  width: calc(var(--full-size) * 6);
+  height: calc(var(--full-size) * 6);
 }
 
+#reload {
+  border: 2px solid red;
+  height: 7rem;
+}
 
 #foreground {
   position: relative;
@@ -63,23 +77,306 @@ html {
 
 #background {
   position: relative;
-  /* top: 18px; */
-  top: 16px;
-  left: -15px;
-  /* left: 16px; */
+  top: -8px;
+  left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: border-width 100ms linear 20ms,
     border-color 100ms linear 20ms,
     background-color 100ms ease-in 0ms,
     border-radius 120ms ease-in 20ms;
 }
 
+.innerStroke {
+  position: relative;
+  /* left: .25px; */
+  /* bottom: .25px; */
+  width: 60%;
+  height: 60%;
+  border: 1px solid var(--idle-outline-color);
+  background-color: var(--nav-color);
+  transition: border-width 100ms linear 20ms,
+     border-color 100ms linear 20ms,
+     background-color 100ms ease-in 0ms,
+     border-radius 150ms ease-in 20ms;
+}
+
 #foreground:hover, #background:hover {
   cursor: pointer;
   background-color: var(--hover-color);
   border-color: var(--hover-outline-color);
-  border-radius: 3rem;
+  border-radius: 10px;
 }
 
 #foreground:active, #background:active {
   background-color: white;
+}
+
+.rowString {
+  background: var(--bg-color);
+  width: 80%;
+  padding: 0px 0px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+
+.swatch {
+  display: flex;
+  justify-content: flex-start;
+  border: 1.5px solid var(--idle-outline-color);
+  background-color: var(--bg-color);
+  width: 3rem;
+  height: 3rem;
+  margin: 5%;
+  cursor: pointer;
+  transition: width 100ms linear 20ms,
+    height 100ms linear 20ms,
+    margin 100ms linear 20ms,
+    border-color 100ms ease-in 0ms,
+    background-color 100ms ease-in 0ms;
+}
+
+.slider {
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
+  bottom: 1px;
+  left: 1px;
+  width: 30%;
+  height: inherit;
+}
+
+.handle {
+  position: relative;
+  bottom: .5px;
+  right: 3px;
+  width: 0%;
+  height: inherit;
+  background-color: transparent;
+  border: 1.5px solid transparent;
+  transition: width 100ms linear 20ms,
+    border-color 100ms ease-in 0ms,
+    background-color 100ms ease-in 0ms;
+  cursor: move; /* fallback if grab cursor is unsupported */
+}
+
+.handle:active {
+  cursor: move;
+  /* cursor: grabbing; */
+  /* cursor: -webkit-grabbing; */
+}
+
+/* #handle1:hover, #handle2:hover, #handle3:hover, #handle4:hover, #handle5:hover {
+    cursor: grab;
+}
+
+#handle1:active, #handle2:active, #handle3:active, #handle4:active, #handle5:active {
+    cursor: grabbing;
+} */
+
+.swatch:hover {
+    border-color: var(--hover-outline-color);
+    width: 4rem;
+    height: 4rem;
+    margin-top: .3125rem;
+    -webkit-filter: drop-shadow(.3125rem .3125rem .25rem rgba(0,0,0,0.3125));
+}
+
+.swatch:active {
+    background-color: white;
+}
+
+.trimUp, .trimDown {
+  /* border: 2px solid red; */
+  height: 2rem;
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.trimUp {
+  margin-top: .25rem;
+  margin-bottom: 0rem;
+}
+
+.triangleUD {
+  position: relative;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  transition: border 100ms ease-in 20ms,
+              top 100ms ease-in 0ms,
+              bottom 100ms ease-in 0ms;
+    /* border- 100ms ease-in 0ms, */
+}
+
+.colorPick {
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 2px;
+}
+
+.historyPick {
+  /* border: 2px solid red; */
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.backArea, .forwardArea {
+  width: 50%;
+  /* border: 2px solid blue; */
+  background-color: #2b2b2b;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.triangleWE {
+  position: relative;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  transition: border 100ms ease-in 20ms,
+              left 100ms ease-in 0ms,
+              right 100ms ease-in 0ms;
+}
+
+.tri-left {
+  border-right: 5px solid #2b2b2b;
+}
+.tri-right {
+  border-left: 5px solid #2b2b2b;
+}
+
+.tri-up {
+  border-bottom: 5px solid var(--idle-color);
+}
+
+/* .tri-up:hover {
+  bottom: 1px;
+  border-bottom: 7px solid var(--hover-color);
+} */
+
+.tri-down {
+  border-top: 5px solid var(--idle-color);
+}
+
+/* .tri-down:hover {
+  top: 1px;
+  border-top: 7px solid var(--hover-color);
+} */
+
+/* @media only screen and (max-width: 110px){
+  .rowString {
+    padding-top: 4px;
+  }
+  .swatch {
+    margin: 0%;
+  }
+} */
+
+@media only screen and (max-width: 144px){
+  .rowString {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  .swatch {
+      margin: 3%;
+  }
+}
+
+
+@media only screen and (max-width: 102px){
+  .rowString {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  .swatch {
+      margin: 2%;
+  }
+}
+
+@media only screen and (max-width: 76px){
+  .rowString {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  .swatch {
+    margin: 0%;
+  }
+
+  .cross {
+    left: 2px;
+    bottom: 3px;
+    width: 0px;
+    height: 135%;
+    transform: rotate(45deg);
+  }
+
+  .trimUp, .trimDown {
+    justify-content: flex-start;
+    margin-left: 15%;
+    /* align-items: center; */
+  }
+}
+
+/* @media only screen and (max-width: 68px){
+  .rowString {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+} */
+
+
+@media only screen and (max-width: 66px){
+  .trimUp, .trimDown {
+    justify-content: flex-start;
+    margin-left: 20%;
+  }
+  .rowString {
+    width: 80%;
+    margin-left: 1px;
+    margin-right: 1px;
+  }
+}
+
+
+@media only screen and (max-width: 50px){
+  .colorPick {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  .rowString {
+    width: 90%;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  .swatch {
+    width: 100%;
+    margin: 0px;
+  }
+  .swatch:hover {
+    height: 4rem;
+    width: 100%;
+    margin-top: 0rem;
+  }
+
+  .cross {
+    left: 5px;
+    bottom: 7px;
+    height: 180%;
+    transform: rotate(57deg);
+  }
+
+  .trimUp, .trimDown {
+    justify-content: center;
+    margin-left: 0px;
+  }
 }
