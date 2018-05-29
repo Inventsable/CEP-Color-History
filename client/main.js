@@ -4,6 +4,9 @@
  *
  * main.js
  *
+ * Needs an if InStr(colorHistory, ",") RTrim equivalent
+ * Needs gatekeeper for colorHistory to prevent undefined or null values
+ *
  * @function addToHistory(location,color)
  *	 @param location	add to 'start' or 'end' of active colorHistory array.
  *	 @param color			new hexadecimal ('ff0000') value to add.
@@ -40,22 +43,15 @@ var csInterface = new CSInterface();
 	var toggleTimer;
 	var groundState = 1;
 	var count = 0;
+	var historyIndex = 1;
 
-	// var backgroundStroke = document.getElementById('bgStroke');
-	// var reloadButton = document.getElementById('reload');
-	// var sendButton = document.getElementById('send');
-	// var takeButton = document.getElementById('take');
-	// var upButton = document.getElementById('up');
-	// var downButton = document.getElementById('down');
-	// var allControls = document.getElementById('footer');
+	var swatch = document.getElementById('rowString').childNodes;
 
 	window.onload = assignByApp();
 	window.onload = loadLibraries();
 	window.onload = snippingToggle("Off");
-	// window.onload = hideControls();
-	// window.onload = readHistory();
 
-	var historyIndex = 1;
+
 ////////////////////////////////////
 
 // head ////////////////////////////
@@ -77,33 +73,22 @@ function alertResult(params) {
 
 
 function snippingToggle(params) {
-	var swatch = document.getElementById('rowString').childNodes;
+	// var swatch = document.getElementById('rowString').childNodes;
 	for (var index = 1; index <= maxNumber; index++) {
+		// should be child, not id, based
 		var thisHandle = document.getElementById('handleSnip' + index);
 		if (params === "On") {
 			thisHandle.style.display = "block";
 		} else {
 			thisHandle.style.display = "none";
 		}
-		// var sliders = swatch[index].childNodes;
-		// var handles = sliders[1].childNodes;
-		// if (params === "On") {
-		// 	sliders[1].style.display = "block";
-		// 	handles[0].style.display = "block";
-		// } else {
-		// 	sliders[1].style.display = "none";
-		// 	handles[0].style.display = "none";
-		// }
 	}
 	if (params === "On") {
 		updateHistory();
 	}
 }
 
-
 function scannerToggle(params) {
-	// var timer;
-	// var toggleTimer;
 	if (params === "On") {
 		if (appName === "PHXS") {
 			timer = setInterval(function(){scanPSColors();}, 200);
@@ -124,22 +109,13 @@ function scannerToggle(params) {
 
 function assignByApp() {
 	if (appName === "PHXS") {
-		// csInterface.evalScript('bgColorFromPS();', alertResult);
-		// grabPSColors();
-		// setInterval(function(){scanPSColors();}, 200);
 		scannerToggle("On");
-		// foreground.addEventListener("click", function(){csInterface.evalScript('fgColorFromPS();', fgResult)}, false);
-		// background.addEventListener("click", function(){csInterface.evalScript('bgColorFromPS();', bgResult)}, false);
 		foreground.addEventListener("click", function(){colorSetFG();}, false);
 		background.addEventListener("click", function(){colorSetBG();}, false);
 		foreground.style.backgroundColor = '#7e7e7e';
-		// foreground.addEventListener("click", function(){csInterface.evalScript('fgColorFromPS();', fgResult)}, false);
-		// background.addEventListener("click", function(){csInterface.evalScript('bgColorFromPS();', bgResult)}, false);
 	} else if (appName === "ILST") {
 		scannerToggle("On");
 		recolorHandles();
-		// setInterval(function(){scanIsFill();}, 200);
-		// setInterval(function(){scanAIColors();}, 200);
 		foreground.style.backgroundColor = '#b7b7b7';
 		background.style.backgroundColor = '#515151';
 		foreground.addEventListener("click", function(){csInterface.evalScript(`fillColorFromAI();`, fgResult)}, false);
@@ -147,8 +123,6 @@ function assignByApp() {
 	} else if (appName === "AEFT") {
 		foreground.addEventListener("click", function(){csInterface.evalScript(`msgAE();`, msgResult)}, false);
 		background.addEventListener("click", function(){location.reload();}, false);
-		// colorHistory = ["ff0000", "00AAFF", "000000", "ffffff", "AA00FF"]
-		// updateHistory();
 	}
 	colorFix();
 }
@@ -195,15 +169,12 @@ function scanPSColors(){
 }
 
 function scanAIColors(){
-	// csInterface.evalScript('colorFromIllustrator();', checkIfColor);
 	csInterface.evalScript('strokeColorFromAI();', checkIfColor);
 	csInterface.evalScript('fillColorFromAI();', checkIfColor);
-	// console.log(colorHistory);
 }
 
 function checkIfColor(newColor){
 	if(newColor.length > 6) {
-		// console.log("Undefined.");
 	} else {
 		var fails = 0;
 		for (var index = 0; index < colorHistory.length; index++){
@@ -229,10 +200,7 @@ function showColorHistory(){
 }
 
 function resetThisHistory(){
-	// var thisHistory = "colorHistory" + historyIndex;
-	// console.log(`resetCookie('${historyIndex}')`);
 	resetCookie(`'${historyIndex}'`);
-	// convertCookiesToHistory(`'${historyIndex}'`);
 	updateHistory();
 	console.log("reset");
 }
@@ -248,10 +216,6 @@ function snatchSelectedColors(){
 
 
 function appendColors(params) {
-	// while (append.length > 0) {
-	// 	append.pop();
-	// }
-	// console.log(params);
 	var append = [];
 	console.log(`old history is: ${colorHistory}`);
 	append = params.split(",");
@@ -268,16 +232,12 @@ function appendColors(params) {
 				colorHistory.push(append[index]);
 			}
 		}
-		// colorHistory.push(insert[index]);
 	}
 	console.log(`new history is: ${colorHistory}`);
 	updateHistory();
 }
 
 function rewriteColors(params) {
-	// while (insert.length > 0) {
-	// 	insert.pop();
-	// }
 	var insert = [];
 	console.log(`old history is: ${colorHistory}`);
 	while (colorHistory.length > 0) {
@@ -298,11 +258,6 @@ function updateHistory(){
 	hideSwatches();
 	hideSwatchesByChild();
 	colorSwatchesByChild();
-	resetAllCrossesAndStrokes();
-	fixLastHighlight();
-	fixFirstHandle();
-	refreshAllHandles();
-	// updateCookies(historyIndex, "add", location, color);
 }
 
 function addToHistory(location, color) {
@@ -310,11 +265,6 @@ function addToHistory(location, color) {
 	showSwatches();
 	updateCookies(historyIndex, "add", location, color);
 	colorSwatchesByChild();
-	resetAllCrossesAndStrokes();
-	fixLastHighlight();
-	fixFirstHandle();
-	refreshAllHandles();
-	// hideCrossesInCenter();
 	console.log("History " + historyIndex + " is: " + getCookie("colorHistory" + historyIndex));
 }
 
@@ -324,11 +274,6 @@ function removeFromHistory(location) {
 	hideSwatches();
 	hideSwatchesByChild();
 	colorSwatchesByChild();
-	resetAllCrossesAndStrokes();
-	fixLastHighlight();
-	fixFirstHandle();
-	refreshAllHandles();
-	// hideCrossesInCenter();
 	console.log("History " + historyIndex + " is: " + getCookie("colorHistory" + historyIndex));
 }
 
@@ -342,10 +287,6 @@ function nextHistory(){
 	showSwatches();
 	hideSwatchesByChild();
 	colorSwatchesByChild();
-	resetAllCrossesAndStrokes();
-	fixLastHighlight();
-	fixFirstHandle();
-	// hideCrossesInCenter();
 	console.log("history index:" + historyIndex);
 	console.log(colorHistory);
 }
@@ -368,9 +309,6 @@ function previousHistory(){
 	showSwatches();
 	hideSwatchesByChild();
 	colorSwatchesByChild();
-	resetAllCrossesAndStrokes();
-	// hideCrossesInCenter();
-	// colorSwatches();
 	console.log("history index:" + historyIndex);
 	console.log(colorHistory);
 }
@@ -380,7 +318,6 @@ function previousHistory(){
 
 // Illustrator ////////////////////
 function scanIsFill() {
-	// console.log("working");
 	csInterface.evalScript('switchScanner();', scanResult)
 }
 
@@ -388,7 +325,6 @@ function scanResult(params){
 	if (appName === "ILST") {
 		if (params === '1') {
 			var bounds = document.getElementById('bounds');
-			// bounds.style.left = "1px";
 			foreground.style.zIndex = "1"
 			foreground.style.backgroundColor = "#b7b7b7";
 			foreground.style.borderRadius = ".25rem";
@@ -411,7 +347,6 @@ function scanResult(params){
 			innerStroke.style.borderRadius = ".25rem";
 			background.style.borderColor = "#b7b7b7";
 			innerStroke.style.borderColor = "#b7b7b7";
-			// console.log("0");
 		}
 	}
 }
@@ -429,9 +364,6 @@ function colorFix(){
 		var rowString = document.getElementsByClassName("rowString");
 		rowString[0].style.backgroundColor = "#323232";
 		innerStroke.style.display = "block";
-		// innerStroke.style.zIndex = "1";
-		// var footer = document.getElementById('footer');
-		// footer.style.backgroundColor = "#323232";
 	} else if (appName === "PHXS") {
 		var content = document.getElementById("content");
 		backArea.style.backgroundColor = "#2e2e2e";
@@ -462,8 +394,8 @@ function colorFix(){
 ///////////////////////
 
 function resizePanelForAE(){
- var fullsize = document.getElementById('content');
- fullsize.style.width = "34px";
+var fullsize = document.getElementById('content');
+fullsize.style.width = "34px";
 var nav = document.getElementById('nav');
 nav.style.paddingLeft = "0px";
 nav.style.paddingRight = "0px";
@@ -476,11 +408,6 @@ rowString.style.marginRight = "0px";
 var swatch = document.getElementsByClassName('swatch');
 for (var index = 0; index < swatch.length; index++) {
 	swatch[index].style.width = "100%";
-	var thisCross = swatch[index].childNodes;
-	thisCross[1].style.left = "5px";
-	thisCross[1].style.bottom = "7px";
-	thisCross[1].style.height = "180%";
-	thisCross[1].style.transform = "rotate(57deg)";
 }
 trimUp.style.justifyContent = "center";
 trimUp.style.marginLeft = "0px";
@@ -508,10 +435,8 @@ backArea.addEventListener("click", function(){
 }, false);
 
 forwardArea.addEventListener("mouseover", function( event ) {
-	// console.log("working");
 	event.target.style.borderLeftWidth = "7px";
 	event.target.style.left = "1px";
-	// event.target.style.borderRightColor = "rgba(255, 255, 255, 0.75)";
 });
 forwardArea.addEventListener("mouseout", function( event ) {
 	event.target.style.borderLeftWidth = "5px";
@@ -519,7 +444,6 @@ forwardArea.addEventListener("mouseout", function( event ) {
 });
 
 backArea.addEventListener("mouseover", function( event ) {
-	// console.log("working");
 	event.target.style.borderRightWidth = "7px";
 	event.target.style.right = "1px";
 });
@@ -537,49 +461,7 @@ trimDown.addEventListener("click", function(){
 	removeFromHistory("end");
 }, false);
 
-function fixFirstHandle(){
-	var swatch = document.getElementById('rowString').childNodes;
-	// swatch[0].addEventListener("mouseover", function( event ) {
-		// event.target.style.borderColor = "rgba(255, 255, 255, 0.75)";
-		var handle = swatch[0].childNodes;
-		handle[1].style.display = "none";
-		var slider = handle[0].childNodes;
-		slider[0].style.borderColor = "transparent";
-		var lastHandle = swatch[(colorHistory.length - 1)].childNodes;
-		lastHandle[1].style.display = "none";
-		var lastSlider = lastHandle[0].childNodes;
-		lastSlider[0].style.borderColor = "transparent";
-		// handle[0].style.borderColor = "rgba(255, 255, 255, .25)";
-	};
-
-function refreshAllHandles(){
-	var swatch = document.getElementById('rowString').childNodes;
-	for (var index = 0; index < colorHistory.length; index++) {
-		var thisHandle = swatch[index].childNodes;
-		thisHandle[1].style.borderColor = 'transparent';
-		var thisSlider = thisHandle[0].childNodes;
-		thisSlider[0].style.borderColor = 'transparent';
-	}
-}
-
-function fixLastHighlight(){
-	var swatch = document.getElementById('rowString').childNodes;
-	swatch[(colorHistory.length - 1)].addEventListener("mouseover", function( event ) {
-		// event.target.style.borderColor = "rgba(255, 255, 255, 0.75)";
-		event.target.style.borderColor = "transparent";
-		var handle = swatch[(colorHistory.length - 1)].childNodes;
-		handle[1].style.display = 'none';
-		// handle[0].style.borderColor = "rgba(255, 255, 255, .25)";
-	});
-
-	swatch[(colorHistory.length - 1)].addEventListener("mouseout", function( event ) {
-		event.target.style.borderColor = "transparent";
-		var handle = swatch[(colorHistory.length - 1)].childNodes;
-		handle[1].style.display = 'block';
-	});
-}
-
-var swatch = document.getElementById('rowString').childNodes;
+// var swatch = document.getElementById('rowString').childNodes;
 swatch[0].addEventListener("mouseover", function( event ) {
 	event.target.style.borderColor = "transparent";
 	var handle = swatch[0].childNodes;
@@ -597,7 +479,7 @@ trimUp.addEventListener("mouseover", function( event ) {
 	trimUpArrow.style.borderTopWidth = "7px";
 	trimUpArrow.style.borderTopColor = "rgba(255, 255, 255, 0.75)";
 	trimUpArrow.style.top = "1px";
-	var swatch = document.getElementById('rowString').childNodes;
+	// var swatch = document.getElementById('rowString').childNodes;
 	var thisCross = swatch[0].childNodes;
 	if (appName === "ILST") {
 		swatch[0].style.backgroundColor = "#323232";
@@ -619,7 +501,7 @@ trimUp.addEventListener("mouseout", function( event ) {
 	trimUpArrow.style.borderTopColor = "rgba(50, 50, 50, 1)";
 	trimUpArrow.style.borderTopColor = "transparent";
 	trimUpArrow.style.top = "0px";
-	var swatch = document.getElementById('rowString').childNodes;
+	// var swatch = document.getElementById('rowString').childNodes;
 	swatch[0].style.backgroundColor = "#" + colorHistory[0];
 	swatch[0].style.borderColor = "transparent";
 	var thisCross = swatch[0].childNodes;
@@ -636,7 +518,7 @@ trimDown.addEventListener("mouseover", function( event ) {
 	trimDownArrow.style.borderBottomWidth = "7px";
 	trimDownArrow.style.borderBottomColor = "rgba(255, 255, 255, 0.75)";
 	trimDownArrow.style.bottom = "1px";
-	var swatch = document.getElementById('rowString').childNodes;
+	// var swatch = document.getElementById('rowString').childNodes;
 	if (appName === "ILST") {
 		swatch[(colorHistory.length - 1)].style.backgroundColor = "#323232";
 	} else if (appName === "PHXS") {
@@ -656,7 +538,7 @@ trimDown.addEventListener("mouseout", function( event ) {
 	trimDownArrow.style.borderBottomWidth = "5px";
 	trimDownArrow.style.borderBottomColor = "transparent";
 	trimDownArrow.style.bottom = "0px";
-	var swatch = document.getElementById('rowString').childNodes;
+	// var swatch = document.getElementById('rowString').childNodes;
 	// if (count < 1) {
 		swatch[(colorHistory.length - 1)].style.backgroundColor = "#" + colorHistory[(colorHistory.length - 1)];
 		swatch[(colorHistory.length - 1)].style.borderColor = "transparent";
@@ -667,43 +549,8 @@ trimDown.addEventListener("mouseout", function( event ) {
 		thisHandle[0].style.borderColor = "transparent";
 		thisCross[1].style.borderWidth = "0px";
 		thisHandle[0].style.borderWidth = "0px";
-	fixLastHighlight();
 });
 
-
-function hideCrossesInCenter(){
-	var swatch = document.getElementById('rowString').childNodes;
-	for (var index = 1; index < colorHistory.length; index++) {
-		var thisCross = swatch[index].childNodes;
-
-		thisCross[1].style.borderColor = "transparent";
-		console.log(index);
-	}
-}
-
-function resetAllCrossesAndStrokes(){
-	var swatch = document.getElementById('rowString').childNodes;
-	for (var index = 0; index < colorHistory.length; index++) {
-		var thisCross = swatch[index].childNodes;
-		thisCross[1].style.borderColor = "transparent";
-		swatch[index].style.borderColor = "rgba(255, 255, 255, 0.25)";
-	}
-}
-
-// function hideCrossesByChild(){
-// 	var swatch = document.getElementById('rowString').childNodes;
-// 	for (var index = maxNumber; colorHistory.length <= index; index--) {
-// 		var thisCross = swatch[index].childNodes;
-// 		thisCross[1].style.borderColor = "transparent";
-// 		swatch.style.borderColor = "rgba(255, 255, 255, 0.25)";
-// 	}
-	// swatch[(colorHistory.length - 1)].style.backgroundColor = "grey";
-	// var thisCross = swatch[(colorHistory.length - 1)].childNodes;
-	// thisCross[1].style.borderColor = "transparent";
-// }
-
-
-//
 
 // https://www.davidebarranca.com/2014/01/html-panels-tips-2-including-multiple-jsx/
 function loadJSX(fileName) {

@@ -14,13 +14,11 @@ function generateSwatches(direction) {
 	list.classList.add("rowString");
 	for (var index = 0; index < maxNumber; index++){
 		var currNumber = (index + 1);
-		// var currNumber = 1;
 		var listItem = document.createElement("li");
 		var sliderItem = document.createElement("div");
 		var handleItem = document.createElement("div");
 		var sliderSnip = document.createElement("div");
 		var handleSnip = document.createElement("div");
-		var crossItem = document.createElement("div");
 		listItem.id = "swatch" + currNumber;
 		listItem.classList.add("swatch");
 		sliderItem.id = "slider" + currNumber;
@@ -37,9 +35,6 @@ function generateSwatches(direction) {
 		handleSnip.classList.add("handleSnip");
 		sliderSnip.appendChild(handleSnip);
 
-		crossItem.id = "cross" + currNumber;
-		crossItem.classList.add("cross");
-		listItem.appendChild(crossItem);
 		list.appendChild(listItem);
 	};
   var parentDiv = document.getElementById("content");
@@ -87,8 +82,6 @@ function assignSortable(){
 }
 
 
-
-
 function assignSwatches(){
 	for (var index = maxNumber; index > 0; index--) {
 		(function(index) {
@@ -112,20 +105,14 @@ function assignSwatches(){
 			}, false);
 			if (appName === "ILST") {
 				thisSwatch.addEventListener("mouseover", function( event ) {
-					// event.target.style.backgroundColor = "rgba(255,255,255,.75)"
 					var newColor = event.target.style.backgroundColor;
 					var subColor = newColor.substring(4, newColor.length - 1);
 					var rgb = subColor.split(",");
 					if (onHandle !== true) {
 						csInterface.evalScript(`htmlRGBToHex(${rgb[0]},${rgb[1]},${rgb[2]})`, dimColor)
 					}
-					// var thisHandle = event.target.childNodes;
-					// thisHandle[1].style.borderColor = "transparent";
-					// var thisSlider = thisHandle[0].childNodes;
-					// thisSlider[0].style.borderColor = "rgba(255,255,255,.25)";
 				}, false);
 				thisSwatch.addEventListener("mouseout", function( event ) {
-					fixLastHighlight();
 					csInterface.evalScript(`returnOpacity();`)
 				}, false);
 			}
@@ -144,6 +131,12 @@ function assignSwatches(){
 				var newParent = this.parentNode.parentNode;
 				var parentColor = newParent.parentNode.style.backgroundColor;
 				var newNumber = newParent.id.substring(6, 7);
+
+				// @@ Fix this. Currently uses id, will snip wrong swatch if swatches are dragged.
+				// Needs to call program, reconvert, scan and dynamically find index like sendColor
+
+				// Need to get the backgroundColor prior to snipping change
+
 				// var someNumber = event.target.id;
 				// console.log(newParent.id + " and " + someNumber);
 				// var subColor = newColor.substring(4, newColor.length - 1);
@@ -241,14 +234,6 @@ function highlighter(params) {
 	console.log(highlight);
 }
 
-// function highlighted(){
-// 	if (highlight) {
-// 		return true;
-// 	} else {
-// 		return false;
-// 	}
-// }
-
 function dimColor(newColor){
 	if (newColor.length < 7) {
 		if (highlight) {
@@ -259,8 +244,6 @@ function dimColor(newColor){
 		}
 	}
 }
-
-
 
 function snipSliderOn(index) {
 	var thisHandle = document.getElementById('handleSnip' + index);
@@ -284,21 +267,6 @@ function snipSliderOff(index) {
 	thisHandle.style.width = "0%";
 }
 
-// function snipClick( function ( event ) {
-// 	var newColor = event.target.style.backgroundColor;
-// 	var subColor = newColor.substring(4, newColor.length - 1);
-// 	var rgb = subColor.split(",");
-// 	if (onHandle !== true) {
-// 		csInterface.evalScript(`htmlRGBToHex(${rgb[0]},${rgb[1]},${rgb[2]})`, dimColor)
-// 	}
-// }
-//
-// 	index) {
-// 	var thisHandle = document.getElementById('handleSnip' + index);
-// 	var checkColor = swatch[(index - 1)].style.backgroundColor;
-// 	console.log(checkColor);
-// }
-
 function snipHandleOn(index) {
 	var swatch = document.getElementById('rowString').childNodes;
 	onSnip = true;
@@ -320,8 +288,6 @@ function snipHandleOff(index) {
 	swatch[(index - 1)].style.borderColor = "transparent";
 	swatch[(index - 1)].style.borderWidth = "0px";
 }
-
-
 
 
 function swatchSliderOn(index) {
@@ -381,9 +347,6 @@ function hideSwatchesByChild() {
 			continue;
 		} else {
 			currentSwatch[index].style.display = "none";
-			// console.log(index);
-			// var newID = "swatch" + index;
-			// document.getElementById(newID).style.display = "none";
 		}
 	}
 }
@@ -414,22 +377,17 @@ function showSwatches() {
 	for (var index = 0; index <= colorHistory.length; index++) {
 		var currentSwatch = document.getElementById('rowString').childNodes;
 		currentSwatch[index].style.display = "flex";
-		// console.log(colorHistory);
-		// var newID = "swatch" + index;
-		// document.getElementById(newID).style.display = "flex";
 	}
 }
 
 function addNewSwatch() {
 	var currentSwatch = document.getElementById('rowString').childNodes;
 	currentSwatch[(colorHistory.length)].style.display = "flex";
-	// document.getElementById('swatch' + (colorHistory.length + 1)).style.display = "flex";
 }
 
 function removeLastSwatch(location) {
 	var currentSwatch = document.getElementById('rowString').childNodes;
 	currentSwatch[(colorHistory.length + 1)].style.display = "none";
-	// document.getElementById('swatch' + colorHistory.length).style.display = "none";
 }
 
 function colorSwatches() {
@@ -440,7 +398,6 @@ function colorSwatches() {
 		var newSwatchNumber = "swatch" + (index + 1);
 		var currentSwatch = document.getElementById(newSwatchNumber).style;
 		currentSwatch.backgroundColor = newSwatchColor;
-		// console.log(newSwatchNumber);
 	});
 }
 
@@ -449,32 +406,9 @@ function colorSwatchesByChild() {
 		if (colorHistory.length > maxNumber)
 			colorHistory.pop();
 		var newSwatchColor = "#" + hexColor;
-		// var newSwatchNumber = "swatch" + (index + 1);
 		var currentSwatch = document.getElementById('rowString').childNodes;
 		currentSwatch[index].style.backgroundColor = newSwatchColor;
 		currentSwatch[index].style.display = "flex";
 		currentSwatch[index].style.borderWidth = "0px";
-		// console.log(currentSwatch[index]);
 	});
 }
-
-
-/// https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
-
-// function componentToHex(c) {
-//     var hex = c.toString(16);
-//     return hex.length == 1 ? "0" + hex : hex;
-// }
-//
-// function rgbToHex(r, g, b) {
-//     return componentToHex(r) + componentToHex(g) + componentToHex(b);
-// }
-//
-// function hexToRgb(hex) {
-//     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-//     return result ? {
-//         r: parseInt(result[1], 16),
-//         g: parseInt(result[2], 16),
-//         b: parseInt(result[3], 16)
-//     } : null;
-// }

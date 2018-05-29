@@ -14,14 +14,15 @@ body {
   background-color: var(--bg-color);
   margin: 0px;
   max-width: 60rem;
-  width:100%;
+  overflow: hidden;
+  /* width:100%; */
 }
 
 ul {
   list-style-type: none;
 }
 
-.cross {
+/* .cross {
   display: block;
   position: relative;
   left: 2px;
@@ -31,10 +32,8 @@ ul {
   transform: rotate(45deg);
   border: 0px solid transparent;
   transition: border-color 100ms ease-in 0ms,
-              /* border-width 100ms ease-in 0ms, */
               display 100ms ease-in 0ms;
-
-}
+} */
 
 .content {
   width: 100%;
@@ -353,13 +352,13 @@ ul {
     margin: 0%;
   }
 
-  .cross {
+  /* .cross {
     left: 2px;
     bottom: 3px;
     width: 0px;
     height: 135%;
     transform: rotate(45deg);
-  }
+  } */
 
   .trimUp, .trimDown {
     justify-content: flex-start;
@@ -412,12 +411,12 @@ ul {
     margin-top: 0rem;
   }
 
-  .cross {
+  /* .cross {
     left: 5px;
     bottom: 7px;
     height: 180%;
     transform: rotate(57deg);
-  }
+  } */
 
   .trimUp, .trimDown {
     justify-content: center;
