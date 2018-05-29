@@ -13,6 +13,16 @@ var exist = app.documents.length > 0;
 var hasPaths = doc.pathItems.length > 0;
 var switchNumber = 1;
 
+var allPaths = doc.pathItems.length;
+var allTexts = doc.textFrames.length;
+
+var selectedColors = [];
+var allColors = [];
+var prevOpacityTexts = [];
+var prevOpacityPaths = [];
+
+
+
 // checkForFill();
 
 // alert(switchScanner());
@@ -188,6 +198,7 @@ function rgbActiveHex(type, here) {
 }
 
 
+
 function htmlRGBToHex(r, g, b) {
   if ((r !== 'undefined') && (g !== 'undefined') && (b !== 'undefined')) {
     var nColor = new RGBColor;
@@ -201,13 +212,142 @@ function htmlRGBToHex(r, g, b) {
   }
 }
 
-// alert(doc.textFrames.length)
 
-var allPaths = doc.pathItems.length;
-var allTexts = doc.textFrames.length;
+function rgbActive(item, which, here) {
+  var activeObject;
+  if (item === "pathItems") {
+    if (which === "stroke") {
+      activeObject = doc.pathItems[here].strokeColor
+    } else if (which === "fill") {
+      activeObject = doc.pathItems[here].fillColor
+    }
+  } else if (type === "textFrames") {
+    activeObject = doc.textFrames[here].textRange.characterAttributes.fillColor
+  }
+    var convertColor = rgbToHex(activeObject.red, activeObject.green, activeObject.blue);
+    return convertColor;
+}
 
-var prevOpacityTexts = [];
-var prevOpacityPaths = [];
+
+function rgbSelectedActive(item, which, here) {
+  var activeObject;
+  if (item === "pathItems") {
+    if (which === "stroke") {
+      activeObject = app.selection[here].strokeColor
+    } else if (which === "fill") {
+      activeObject = app.selection[here].fillColor
+    }
+  } else if (type === "textFrames") {
+    activeObject = doc.textFrames[here].textRange.characterAttributes.fillColor
+  }
+    var convertColor = rgbToHex(activeObject.red, activeObject.green, activeObject.blue);
+    return convertColor;
+}
+
+function checkNew(params){
+  if (allColors.length > 29) {
+    return
+  }
+  if (allColors.length > 0) {
+    var fail = 0;
+    for (var index = 0; index < allColors.length; index++) {
+      if (params !== allColors[index]) {
+        fail++;
+      } else {
+        break;
+      }
+      if (fail === allColors.length) {
+        allColors.push(params);
+      }
+    }
+  } else {
+    allColors.push(params)
+  }
+// alert(allColors);
+}
+
+function checkSelected(params){
+  if (params.length < 4) {
+    return;
+  }
+  if (params.length > 7) {
+    return;
+  }
+  if (selectedColors.length > 29) {
+    return;
+  }
+  if (selectedColors.length > 0) {
+    var fail = 0;
+    for (var index = 0; index < selectedColors.length; index++) {
+      if (params !== selectedColors[index]) {
+        fail++;
+      } else {
+        break;
+      }
+      if (fail === selectedColors.length) {
+        selectedColors.push(params);
+      }
+    }
+  } else {
+    selectedColors.push(params)
+  }
+// alert(selectedColors);
+}
+
+// alert(selectedArtColors());
+
+// alert(selectedArtColors());
+// alert(isSelected);
+
+// var isSelected = app.selection.length > 0;
+
+
+function selectedArtColors(){
+  // while (selectedColors.length > 0) {
+  //   selectedColors.pop();
+  // }
+  selectedColors = [];
+  if (exist && app.selection.length > 0){
+    // alert(app.selection.length);
+    for (var index = 0; index < app.selection.length; index++) {
+      var currentSelection = app.selection[index];
+      if ((currentSelection.stroked) && !(currentSelection.filled)) {
+        checkSelected(rgbSelectedActive("pathItems", "stroke", index));
+      } else if ((currentSelection.filled) && !(currentSelection.stroked)) {
+        checkSelected(rgbSelectedActive("pathItems", "fill", index));
+      } else if ((currentSelection.filled) && (currentSelection.stroked)) {
+        checkSelected(rgbSelectedActive("pathItems", "stroke", index));
+        checkSelected(rgbSelectedActive("pathItems", "fill", index));
+      }
+    }
+  }
+  return selectedColors;
+}
+
+
+function allArtColors(){
+  // while (allColors.length > 0) {
+  //   allColors.pop();
+  // }
+  allColors = [];
+  if (exist && hasPaths){
+    for (var index = 0; index < allPaths; index++) {
+      if ((doc.pathItems[index].stroked) && !(doc.pathItems[index].filled)) {
+        checkNew(rgbActive("pathItems", "stroke", index));
+      } else if ((doc.pathItems[index].filled) && !(doc.pathItems[index].stroked)) {
+        checkNew(rgbActive("pathItems", "fill", index));
+      } else if ((doc.pathItems[index].filled) && (doc.pathItems[index].stroked)) {
+        checkNew(rgbActive("pathItems", "stroke", index));
+        checkNew(rgbActive("pathItems", "fill", index));
+      }
+    }
+  }
+  return allColors;
+}
+
+// create function that receives flyoutmenu prompt in js
+// pop current colorHistory, replace with allColors, setCookie and updateHistory
+
 
 function lowerOpacity(exceptThis) {
   if (exist && hasPaths) {

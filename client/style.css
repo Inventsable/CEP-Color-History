@@ -28,7 +28,7 @@ ul {
   width: 0px;
   height: 135%;
   transform: rotate(45deg);
-  border: 1px solid transparent;
+  border: 0px solid transparent;
   transition: border-color 100ms ease-in 0ms;
 }
 
@@ -126,7 +126,7 @@ ul {
 .swatch {
   display: flex;
   justify-content: flex-start;
-  border: 1.5px solid var(--idle-outline-color);
+  border: 0px solid var(--idle-outline-color);
   background-color: var(--bg-color);
   width: 3rem;
   height: 3rem;
@@ -147,16 +147,18 @@ ul {
   left: 1px;
   width: 30%;
   height: inherit;
+  align-items: center;
 }
 
 .handle {
   position: relative;
-  bottom: .5px;
+  /* bottom: .5px; */
+  top: 1px;
   right: 3px;
   width: 0%;
   height: inherit;
   background-color: transparent;
-  border: 1.5px solid transparent;
+  border: 0px solid transparent;
   transition: width 100ms linear 20ms,
     border-color 100ms ease-in 0ms,
     background-color 100ms ease-in 0ms;
@@ -182,7 +184,7 @@ ul {
     width: 4rem;
     height: 4rem;
     margin-top: .3125rem;
-    -webkit-filter: drop-shadow(.3125rem .3125rem .25rem rgba(0,0,0,0.3125));
+    -webkit-filter: drop-shadow(.5rem .5rem .3125rem rgba(0,0,0,0.3125));
 }
 
 .swatch:active {

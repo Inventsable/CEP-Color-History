@@ -14,18 +14,24 @@ var csInterface = new CSInterface();
 var appName = csInterface.hostEnvironment.appName;
 var isChecked = true;
 var isFlipped = true;
+var isHighlight = false;
 
 if (appName === "ILST") {
   var menuXML = '<Menu> \
     <MenuItem Id="scanning" Label="Scan on/off" Enabled="true" Checked="true"/> \
-    <MenuItem Id="highlighting" Label="Highlight on/off" Enabled="false" Checked="false"/> \
-    <MenuItem Id="refreshPanel" Label="Refresh panel" Enabled="true" Checked="false"/> \
-    <MenuItem Id="showHistory" Label="Log current history" Enabled="true" Checked="false"/> \
+    <MenuItem Id="highlighting" Label="Highlight on/off" Enabled="false" Checked="true"/> \
+    <MenuItem Id="snatchColors" Label="Snatch all colors" Enabled="true" Checked="false"/> \
+    <MenuItem Id="snatchSelection" Label="Snatch selected colors" Enabled="true" Checked="false"/> \
     <MenuItem Id="flipHandles" Label="Flip handles" Enabled="false" Checked="false"/> \
     \
     <MenuItem Label="---" /> \
     \
-    <MenuItem Id="resetThisCookie" Label="Reset this cookie" Enabled="true" Checked="false"/> \
+    <MenuItem Id="showHistory" Label="Log current history" Enabled="true" Checked="false"/> \
+    <MenuItem Id="refreshPanel" Label="Refresh panel" Enabled="true" Checked="false"/> \
+    \
+    <MenuItem Label="---" /> \
+    \
+    <MenuItem Id="resetThisCookie" Label="Reset this cookie" Enabled="false" Checked="false"/> \
   	<MenuItem Id="resetAllCookies" Label="Reset all cookies" Enabled="true" Checked="false"/> \
     <MenuItem Id="deleteAllCookies" Label="Delete all cookies" Enabled="true" Checked="false"/> \
     \
@@ -43,7 +49,7 @@ if (appName === "ILST") {
     \
     <MenuItem Label="---" /> \
     \
-  	<MenuItem Id="resetThisCookie" Label="Reset this cookie" Enabled="true" Checked="false"/> \
+  	<MenuItem Id="resetThisCookie" Label="Reset this cookie" Enabled="false" Checked="false"/> \
   	<MenuItem Id="resetAllCookies" Label="Reset all cookies" Enabled="true" Checked="false"/> \
     <MenuItem Id="deleteAllCookies" Label="Delete all cookies" Enabled="true" Checked="false"/> \
     \
@@ -69,12 +75,21 @@ function setPanelCallback(event) {
     location.reload();
   } else if (event.data.menuId=="showHistory") {
     showColorHistory();
+  } else if (event.data.menuId=="snatchColors") {
+    snatchColors();
+  } else if (event.data.menuId=="snatchSelection") {
+    snatchSelectedColors();
   } else if (event.data.menuId=="flipHandles") {
     isFlipped = !isFlipped;
     flipHandles(isFlipped);
   } else if (event.data.menuId=="highlighting") {
     isHighlight = !isHighlight;
-    highlight(isHighlight);
+    csInterface.updatePanelMenuItem("Highlight on/off", true, isHighlight);
+    // if (isHighlight) {
+      highlighter(isHighlight);
+    // } else {
+      // scannerToggle("Off");
+    // }
   } else if (event.data.menuId=="scanning") {
     isChecked = !isChecked;
     csInterface.updatePanelMenuItem("Scan on/off", true, isChecked);

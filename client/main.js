@@ -78,7 +78,7 @@ backArea.addEventListener("click", function(){
 }, false);
 
 forwardArea.addEventListener("mouseover", function( event ) {
-	console.log("working");
+	// console.log("working");
 	event.target.style.borderLeftWidth = "7px";
 	event.target.style.left = "1px";
 	// event.target.style.borderRightColor = "rgba(255, 255, 255, 0.75)";
@@ -89,7 +89,7 @@ forwardArea.addEventListener("mouseout", function( event ) {
 });
 
 backArea.addEventListener("mouseover", function( event ) {
-	console.log("working");
+	// console.log("working");
 	event.target.style.borderRightWidth = "7px";
 	event.target.style.right = "1px";
 });
@@ -171,6 +171,9 @@ trimUp.addEventListener("mouseover", function( event ) {
 	swatch[0].style.backgroundColor = "grey";
 	swatch[0].style.borderColor = "red";
 	thisCross[1].style.borderColor = "red";
+	swatch[0].style.borderWidth = "1.5px";
+	thisCross[1].style.borderWidth = "1px";
+	thisCross[1].style.display = "flex";
 });
 
 trimUp.addEventListener("mouseout", function( event ) {
@@ -186,6 +189,9 @@ trimUp.addEventListener("mouseout", function( event ) {
 	var thisHandle = thisCross[0].childNodes;
 	thisCross[1].style.borderColor = "transparent";
 	thisHandle[0].style.borderColor = "transparent";
+	swatch[0].style.borderWidth = "0px";
+	thisCross[1].style.borderWidth = "0px";
+	thisCross[1].style.display = "none";
 });
 
 trimDown.addEventListener("mouseover", function( event ) {
@@ -196,8 +202,10 @@ trimDown.addEventListener("mouseover", function( event ) {
 	var swatch = document.getElementById('rowString').childNodes;
 	swatch[(colorHistory.length - 1)].style.backgroundColor = "grey";
 	swatch[(colorHistory.length - 1)].style.borderColor = "red";
+	swatch[(colorHistory.length - 1)].style.borderWidth = "1.5px";
 	var thisCross = swatch[(colorHistory.length - 1)].childNodes;
 	thisCross[1].style.borderColor = "red";
+	thisCross[1].style.borderWidth = "1px";
 });
 
 trimDown.addEventListener("mouseout", function( event ) {
@@ -209,10 +217,13 @@ trimDown.addEventListener("mouseout", function( event ) {
 	// if (count < 1) {
 		swatch[(colorHistory.length - 1)].style.backgroundColor = "#" + colorHistory[(colorHistory.length - 1)];
 		swatch[(colorHistory.length - 1)].style.borderColor = "rgba(255, 255, 255, 0.25)";
+		swatch[(colorHistory.length - 1)].style.borderWidth = "0px";
 		var thisCross = swatch[(colorHistory.length - 1)].childNodes;
 		var thisHandle = thisCross[0].childNodes;
 		thisCross[1].style.borderColor = "transparent";
 		thisHandle[0].style.borderColor = "transparent";
+		thisCross[1].style.borderWidth = "0px";
+		thisHandle[0].style.borderWidth = "0px";
 	fixLastHighlight();
 });
 
@@ -263,7 +274,6 @@ function loadLibraries() {
 function alertResult(params) {
 	alert(params);
 }
-
 
 function scannerToggle(params) {
 	// var timer;
@@ -389,9 +399,66 @@ function resetThisHistory(){
 	console.log("reset");
 }
 
+
+function snatchColors(){
+		csInterface.evalScript('allArtColors();', rewriteColors);
+}
+
+function snatchSelectedColors(){
+		csInterface.evalScript('selectedArtColors();', appendColors);
+}
+
+
+function appendColors(params) {
+	// while (append.length > 0) {
+	// 	append.pop();
+	// }
+	// console.log(params);
+	var append = [];
+	console.log(`old history is: ${colorHistory}`);
+	append = params.split(",");
+	for (var index = 0; index < append.length; index++)
+	{
+		var fails = 0;
+		for (var indexA = 0; indexA < colorHistory.length; indexA++) {
+			if (append[index] !== colorHistory[indexA]) {
+				fails++;
+			} else {
+				break;
+			}
+			if (fails === colorHistory.length) {
+				colorHistory.push(append[index]);
+			}
+		}
+		// colorHistory.push(insert[index]);
+	}
+	console.log(`new history is: ${colorHistory}`);
+	updateHistory();
+}
+
+function rewriteColors(params) {
+	// while (insert.length > 0) {
+	// 	insert.pop();
+	// }
+	var insert = [];
+	console.log(`old history is: ${colorHistory}`);
+	while (colorHistory.length > 0) {
+		colorHistory.pop();
+	}
+	insert = params.split(",");
+	for (var index = 0; index < insert.length; index++)
+	{
+		colorHistory.push(insert[index]);
+	}
+	console.log(`new history is: ${colorHistory}`);
+	updateHistory();
+}
+
 function updateHistory(){
 	var thisHistory = "colorHistory" + historyIndex;
 	setCookie(thisHistory, colorHistory, 30);
+	hideSwatches();
+	hideSwatchesByChild();
 	colorSwatchesByChild();
 	resetAllCrossesAndStrokes();
 	fixLastHighlight();

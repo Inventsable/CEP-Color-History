@@ -158,17 +158,27 @@ function sendColor(newColor){
 	}
 }
 
-function highlight(isHighlight) {
-	highlight = isHighlight;
+function highlighter(params) {
+	var highlight = params;
 	console.log(highlight);
 }
+
+// function highlighted(){
+// 	if (highlight) {
+// 		return true;
+// 	} else {
+// 		return false;
+// 	}
+// }
 
 function dimColor(newColor){
 	if (newColor.length < 7) {
 		if (highlight) {
 			csInterface.evalScript(`lowerOpacity('${newColor}');`)
+			console.log(`higlighting ${newColor}`);
+		} else {
+			console.log(`Hovering over ${newColor}`);
 		}
-		console.log(`Hovering over ${newColor}`);
 	}
 }
 
@@ -177,7 +187,7 @@ function swatchSliderOn(index) {
 	var thisHandle = document.getElementById('handle' + index);
 	thisHandle.style.backgroundColor = "rgba(46, 46, 46, 1)";
 	thisHandle.style.borderColor = "rgba(255, 255, 255, .25)";
-	thisHandle.style.width = "60%";
+	thisHandle.style.width = "80%";
 	thisHandle.style.cursor = "grab";
 }
 
@@ -198,7 +208,7 @@ function swatchHandleOn(index) {
 	if (onHandle) {
 		var thisHandle = swatch[index].childNodes;
 		thisHandle[0].style.borderColor = "rgba(255,255,255,.25)"
-		// console.log("on handle");
+		console.log("on handle");
 	}
 }
 
@@ -257,7 +267,7 @@ function showSwatches() {
 	for (var index = 0; index <= colorHistory.length; index++) {
 		var currentSwatch = document.getElementById('rowString').childNodes;
 		currentSwatch[index].style.display = "flex";
-		console.log(colorHistory);
+		// console.log(colorHistory);
 		// var newID = "swatch" + index;
 		// document.getElementById(newID).style.display = "flex";
 	}
@@ -295,10 +305,11 @@ function colorSwatchesByChild() {
 		// var newSwatchNumber = "swatch" + (index + 1);
 		var currentSwatch = document.getElementById('rowString').childNodes;
 		currentSwatch[index].style.backgroundColor = newSwatchColor;
-		console.log(currentSwatch[index]);
+		currentSwatch[index].style.display = "flex";
+		currentSwatch[index].style.borderWidth = "0px";
+		// console.log(currentSwatch[index]);
 	});
 }
-
 
 
 /// https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
