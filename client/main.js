@@ -51,229 +51,55 @@ var csInterface = new CSInterface();
 
 	window.onload = assignByApp();
 	window.onload = loadLibraries();
+	window.onload = snippingToggle("Off");
 	// window.onload = hideControls();
 	// window.onload = readHistory();
 
 	var historyIndex = 1;
 ////////////////////////////////////
 
-
-
-historyPick.addEventListener("mouseover", function( event ) {
-	backArrow.style.borderRightColor = "rgba(255, 255, 255, 0.75)";
-	forwardArrow.style.borderLeftColor = "rgba(255, 255, 255, 0.75)";
-});
-historyPick.addEventListener("mouseout", function( event ) {
-	backArrow.style.borderRightColor = "#2b2b2b";
-	forwardArrow.style.borderLeftColor = "transparent";
-});
-
-forwardArea.addEventListener("click", function(){
-	nextHistory();
-	count++;
-}, false);
-
-backArea.addEventListener("click", function(){
-	previousHistory();
-}, false);
-
-forwardArea.addEventListener("mouseover", function( event ) {
-	// console.log("working");
-	event.target.style.borderLeftWidth = "7px";
-	event.target.style.left = "1px";
-	// event.target.style.borderRightColor = "rgba(255, 255, 255, 0.75)";
-});
-forwardArea.addEventListener("mouseout", function( event ) {
-	event.target.style.borderLeftWidth = "5px";
-	event.target.style.left = "0px";
-});
-
-backArea.addEventListener("mouseover", function( event ) {
-	// console.log("working");
-	event.target.style.borderRightWidth = "7px";
-	event.target.style.right = "1px";
-});
-backArea.addEventListener("mouseout", function( event ) {
-	event.target.style.borderRightWidth = "5px";
-	event.target.style.right = "0px";
-});
-
-
-trimUp.addEventListener("click", function(){
-	removeFromHistory("start");
-}, false);
-
-trimDown.addEventListener("click", function(){
-	removeFromHistory("end");
-}, false);
-
-function fixFirstHandle(){
-	var swatch = document.getElementById('rowString').childNodes;
-	// swatch[0].addEventListener("mouseover", function( event ) {
-		// event.target.style.borderColor = "rgba(255, 255, 255, 0.75)";
-		var handle = swatch[0].childNodes;
-		handle[1].style.display = "none";
-		var slider = handle[0].childNodes;
-		slider[0].style.borderColor = "transparent";
-		var lastHandle = swatch[(colorHistory.length - 1)].childNodes;
-		lastHandle[1].style.display = "none";
-		var lastSlider = lastHandle[0].childNodes;
-		lastSlider[0].style.borderColor = "transparent";
-		// handle[0].style.borderColor = "rgba(255, 255, 255, .25)";
-	};
-
-function refreshAllHandles(){
-	var swatch = document.getElementById('rowString').childNodes;
-	for (var index = 0; index < colorHistory.length; index++) {
-		var thisHandle = swatch[index].childNodes;
-		thisHandle[1].style.borderColor = 'transparent';
-		var thisSlider = thisHandle[0].childNodes;
-		thisSlider[0].style.borderColor = 'transparent';
-	}
-}
-
-function fixLastHighlight(){
-	var swatch = document.getElementById('rowString').childNodes;
-	swatch[(colorHistory.length - 1)].addEventListener("mouseover", function( event ) {
-		event.target.style.borderColor = "rgba(255, 255, 255, 0.75)";
-		var handle = swatch[(colorHistory.length - 1)].childNodes;
-		handle[1].style.display = 'none';
-		// handle[0].style.borderColor = "rgba(255, 255, 255, .25)";
-	});
-
-	swatch[(colorHistory.length - 1)].addEventListener("mouseout", function( event ) {
-		event.target.style.borderColor = "rgba(255, 255, 255, 0.25)";
-		var handle = swatch[(colorHistory.length - 1)].childNodes;
-		handle[1].style.display = 'block';
-	});
-}
-
-var swatch = document.getElementById('rowString').childNodes;
-swatch[0].addEventListener("mouseover", function( event ) {
-	event.target.style.borderColor = "rgba(255, 255, 255, 0.75)";
-	var handle = swatch[0].childNodes;
-	handle[1].style.display = 'none';
-});
-
-swatch[0].addEventListener("mouseout", function( event ) {
-	event.target.style.borderColor = "rgba(255, 255, 255, 0.25)";
-	var handle = swatch[0].childNodes;
-	handle[1].style.display = 'block';
-});
-
-trimUp.addEventListener("mouseover", function( event ) {
-	event.target.style.backgroundColor = "transparent";
-	trimUpArrow.style.borderTopWidth = "7px";
-	trimUpArrow.style.borderTopColor = "rgba(255, 255, 255, 0.75)";
-	trimUpArrow.style.top = "1px";
-	var swatch = document.getElementById('rowString').childNodes;
-	var thisCross = swatch[0].childNodes;
-	swatch[0].style.backgroundColor = "grey";
-	swatch[0].style.borderColor = "red";
-	thisCross[1].style.borderColor = "red";
-	swatch[0].style.borderWidth = "1.5px";
-	thisCross[1].style.borderWidth = "1px";
-	thisCross[1].style.display = "flex";
-});
-
-trimUp.addEventListener("mouseout", function( event ) {
-	event.target.style.backgroundColor = "transparent";
-	trimUpArrow.style.borderTopWidth = "5px";
-	trimUpArrow.style.borderTopColor = "rgba(50, 50, 50, 1)";
-	trimUpArrow.style.borderTopColor = "transparent";
-	trimUpArrow.style.top = "0px";
-	var swatch = document.getElementById('rowString').childNodes;
-	swatch[0].style.backgroundColor = "#" + colorHistory[0];
-	swatch[0].style.borderColor = "rgba(255, 255, 255, 0.25)";
-	var thisCross = swatch[0].childNodes;
-	var thisHandle = thisCross[0].childNodes;
-	thisCross[1].style.borderColor = "transparent";
-	thisHandle[0].style.borderColor = "transparent";
-	swatch[0].style.borderWidth = "0px";
-	thisCross[1].style.borderWidth = "0px";
-	thisCross[1].style.display = "none";
-});
-
-trimDown.addEventListener("mouseover", function( event ) {
-	event.target.style.backgroundColor = "transparent";
-	trimDownArrow.style.borderBottomWidth = "7px";
-	trimDownArrow.style.borderBottomColor = "rgba(255, 255, 255, 0.75)";
-	trimDownArrow.style.bottom = "1px";
-	var swatch = document.getElementById('rowString').childNodes;
-	swatch[(colorHistory.length - 1)].style.backgroundColor = "grey";
-	swatch[(colorHistory.length - 1)].style.borderColor = "red";
-	swatch[(colorHistory.length - 1)].style.borderWidth = "1.5px";
-	var thisCross = swatch[(colorHistory.length - 1)].childNodes;
-	thisCross[1].style.borderColor = "red";
-	thisCross[1].style.borderWidth = "1px";
-});
-
-trimDown.addEventListener("mouseout", function( event ) {
-	event.target.style.backgroundColor = "transparent";
-	trimDownArrow.style.borderBottomWidth = "5px";
-	trimDownArrow.style.borderBottomColor = "transparent";
-	trimDownArrow.style.bottom = "0px";
-	var swatch = document.getElementById('rowString').childNodes;
-	// if (count < 1) {
-		swatch[(colorHistory.length - 1)].style.backgroundColor = "#" + colorHistory[(colorHistory.length - 1)];
-		swatch[(colorHistory.length - 1)].style.borderColor = "rgba(255, 255, 255, 0.25)";
-		swatch[(colorHistory.length - 1)].style.borderWidth = "0px";
-		var thisCross = swatch[(colorHistory.length - 1)].childNodes;
-		var thisHandle = thisCross[0].childNodes;
-		thisCross[1].style.borderColor = "transparent";
-		thisHandle[0].style.borderColor = "transparent";
-		thisCross[1].style.borderWidth = "0px";
-		thisHandle[0].style.borderWidth = "0px";
-	fixLastHighlight();
-});
-
-
-function hideCrossesInCenter(){
-	var swatch = document.getElementById('rowString').childNodes;
-	for (var index = 1; index < colorHistory.length; index++) {
-		var thisCross = swatch[index].childNodes;
-
-		thisCross[1].style.borderColor = "transparent";
-		console.log(index);
-	}
-}
-
-function resetAllCrossesAndStrokes(){
-	var swatch = document.getElementById('rowString').childNodes;
-	for (var index = 0; index < colorHistory.length; index++) {
-		var thisCross = swatch[index].childNodes;
-		thisCross[1].style.borderColor = "transparent";
-		swatch[index].style.borderColor = "rgba(255, 255, 255, 0.25)";
-	}
-}
-
-// function hideCrossesByChild(){
-// 	var swatch = document.getElementById('rowString').childNodes;
-// 	for (var index = maxNumber; colorHistory.length <= index; index--) {
-// 		var thisCross = swatch[index].childNodes;
-// 		thisCross[1].style.borderColor = "transparent";
-// 		swatch.style.borderColor = "rgba(255, 255, 255, 0.25)";
-// 	}
-	// swatch[(colorHistory.length - 1)].style.backgroundColor = "grey";
-	// var thisCross = swatch[(colorHistory.length - 1)].childNodes;
-	// thisCross[1].style.borderColor = "transparent";
-// }
-
-
-//
-
 // head ////////////////////////////
 convertCookiesToHistory(historyIndex);
 
 function loadLibraries() {
-	loadJSX("libAI.jsx");
-	loadJSX("libPS.jsx");
-	loadJSX("libAE.jsx");
+	if (appName === "AEFT") {
+		loadJSX("libAE.jsx");
+		console.log("ae only");
+	} else {
+		loadJSX("libAI.jsx");
+		loadJSX("libPS.jsx");
+	}
 }
 
 function alertResult(params) {
 	alert(params);
 }
+
+
+function snippingToggle(params) {
+	var swatch = document.getElementById('rowString').childNodes;
+	for (var index = 1; index <= maxNumber; index++) {
+		var thisHandle = document.getElementById('handleSnip' + index);
+		if (params === "On") {
+			thisHandle.style.display = "block";
+		} else {
+			thisHandle.style.display = "none";
+		}
+		// var sliders = swatch[index].childNodes;
+		// var handles = sliders[1].childNodes;
+		// if (params === "On") {
+		// 	sliders[1].style.display = "block";
+		// 	handles[0].style.display = "block";
+		// } else {
+		// 	sliders[1].style.display = "none";
+		// 	handles[0].style.display = "none";
+		// }
+	}
+	if (params === "On") {
+		updateHistory();
+	}
+}
+
 
 function scannerToggle(params) {
 	// var timer;
@@ -311,12 +137,24 @@ function assignByApp() {
 		// background.addEventListener("click", function(){csInterface.evalScript('bgColorFromPS();', bgResult)}, false);
 	} else if (appName === "ILST") {
 		scannerToggle("On");
+		recolorHandles();
 		// setInterval(function(){scanIsFill();}, 200);
 		// setInterval(function(){scanAIColors();}, 200);
+		foreground.style.backgroundColor = '#b7b7b7';
+		background.style.backgroundColor = '#515151';
 		foreground.addEventListener("click", function(){csInterface.evalScript(`fillColorFromAI();`, fgResult)}, false);
 		background.addEventListener("click", function(){csInterface.evalScript(`strokeColorFromAI();`, bgResult)}, false);
+	} else if (appName === "AEFT") {
+		foreground.addEventListener("click", function(){csInterface.evalScript(`msgAE();`, msgResult)}, false);
+		background.addEventListener("click", function(){location.reload();}, false);
+		// colorHistory = ["ff0000", "00AAFF", "000000", "ffffff", "AA00FF"]
+		// updateHistory();
 	}
 	colorFix();
+}
+
+function msgResult(params){
+	console.log(params);
 }
 
 function fgResult(result){
@@ -547,25 +385,36 @@ function scanIsFill() {
 }
 
 function scanResult(params){
-	if (params === '1') {
-		foreground.style.zIndex = "1"
-		foreground.style.backgroundColor = "#646464";
-		foreground.style.borderRadius = "3rem";
-		background.style.backgroundColor = "#323232";
-		background.style.borderRadius = "0px";
-		innerStroke.style.borderRadius = "0px";
-	} else {
-		foreground.style.zIndex = "0"
-		foreground.style.backgroundColor = "#323232";
-		foreground.style.borderRadius = "0px";
-		background.style.backgroundColor = "#646464";
-		background.style.borderRadius = "3rem";
-		innerStroke.style.borderRadius = "3rem";
-		// console.log("0");
+	if (appName === "ILST") {
+		if (params === '1') {
+			var bounds = document.getElementById('bounds');
+			// bounds.style.left = "1px";
+			foreground.style.zIndex = "1"
+			foreground.style.backgroundColor = "#b7b7b7";
+			foreground.style.borderRadius = ".25rem";
+			background.style.backgroundColor = "#515151";
+			background.style.borderRadius = "0px";
+			background.style.top = "-7px";
+			background.style.left = "7px";
+			innerStroke.style.borderRadius = "0px";
+			background.style.borderColor = "#b7b7b7";
+			innerStroke.style.borderColor = "#b7b7b7";
+		} else {
+			foreground.style.zIndex = "0"
+			foreground.style.backgroundColor = "#515151";
+			foreground.style.borderColor = "#b7b7b7";
+			foreground.style.borderRadius = "0px";
+			background.style.top = "-7px";
+			background.style.left = "7px";
+			background.style.backgroundColor = "#b7b7b7";
+			background.style.borderRadius = ".25rem";
+			innerStroke.style.borderRadius = ".25rem";
+			background.style.borderColor = "#b7b7b7";
+			innerStroke.style.borderColor = "#b7b7b7";
+			// console.log("0");
+		}
 	}
 }
-
-
 
 function colorFix(){
 	if (appName === "ILST") {
@@ -574,7 +423,7 @@ function colorFix(){
 		var body = document.getElementsByTagName("body");
 		body[0].style.backgroundColor = "#323232";
 		var nav = document.getElementById("nav");
-		nav.style.backgroundColor = "#2b2b2b";
+		nav.style.backgroundColor = "#262626";
 		var content = document.getElementById("content");
 		content.style.backgroundColor = "#323232";
 		var rowString = document.getElementsByClassName("rowString");
@@ -583,15 +432,278 @@ function colorFix(){
 		// innerStroke.style.zIndex = "1";
 		// var footer = document.getElementById('footer');
 		// footer.style.backgroundColor = "#323232";
-	} else {
+	} else if (appName === "PHXS") {
 		var content = document.getElementById("content");
 		backArea.style.backgroundColor = "#2e2e2e";
 		forwardArea.style.backgroundColor = "#2e2e2e";
 		content.style.backgroundColor = "#535353";
 		innerStroke.style.display = "none";
+	} else if (appName === "AEFT") {
+		var htmlBody = document.getElementsByTagName("html");
+		htmlBody[0].style.backgroundColor = "#232323";
+		var body = document.getElementsByTagName("body");
+		body[0].style.backgroundColor = "#232323";
+		var nav = document.getElementById("nav");
+		nav.style.backgroundColor = "#161616";
+		var content = document.getElementById("content");
+		content.style.backgroundColor = "#232323";
+		var rowString = document.getElementsByClassName("rowString");
+		rowString[0].style.backgroundColor = "#232323";
+		innerStroke.style.display = "none";
+		var historyPick = document.getElementById('historyPick');
+		historyPick.style.backgroundColor = "transparent";
+		backArea.style.backgroundColor = "transparent";
+		backArrow.style.borderColor = "transparent";
+		forwardArea.style.backgroundColor = "transparent";
+		forwardArrow.style.borderColor = "transparent";
+		resizePanelForAE();
 	}
 }
 ///////////////////////
+
+function resizePanelForAE(){
+ var fullsize = document.getElementById('content');
+ fullsize.style.width = "34px";
+var nav = document.getElementById('nav');
+nav.style.paddingLeft = "0px";
+nav.style.paddingRight = "0px";
+var rowString = document.getElementById('rowString');
+rowString.style.width = "90%";
+rowString.style.paddingLeft = "0px";
+rowString.style.paddingRight = "0px";
+rowString.style.marginLeft = "0px";
+rowString.style.marginRight = "0px";
+var swatch = document.getElementsByClassName('swatch');
+for (var index = 0; index < swatch.length; index++) {
+	swatch[index].style.width = "100%";
+	var thisCross = swatch[index].childNodes;
+	thisCross[1].style.left = "5px";
+	thisCross[1].style.bottom = "7px";
+	thisCross[1].style.height = "180%";
+	thisCross[1].style.transform = "rotate(57deg)";
+}
+trimUp.style.justifyContent = "center";
+trimUp.style.marginLeft = "0px";
+trimDown.style.justifyContent = "center";
+trimDown.style.marginLeft = "0px";
+}
+
+
+historyPick.addEventListener("mouseover", function( event ) {
+	backArrow.style.borderRightColor = "rgba(255, 255, 255, 0.75)";
+	forwardArrow.style.borderLeftColor = "rgba(255, 255, 255, 0.75)";
+});
+historyPick.addEventListener("mouseout", function( event ) {
+	backArrow.style.borderRightColor = "transparent";
+	forwardArrow.style.borderLeftColor = "transparent";
+});
+
+forwardArea.addEventListener("click", function(){
+	nextHistory();
+	count++;
+}, false);
+
+backArea.addEventListener("click", function(){
+	previousHistory();
+}, false);
+
+forwardArea.addEventListener("mouseover", function( event ) {
+	// console.log("working");
+	event.target.style.borderLeftWidth = "7px";
+	event.target.style.left = "1px";
+	// event.target.style.borderRightColor = "rgba(255, 255, 255, 0.75)";
+});
+forwardArea.addEventListener("mouseout", function( event ) {
+	event.target.style.borderLeftWidth = "5px";
+	event.target.style.left = "0px";
+});
+
+backArea.addEventListener("mouseover", function( event ) {
+	// console.log("working");
+	event.target.style.borderRightWidth = "7px";
+	event.target.style.right = "1px";
+});
+backArea.addEventListener("mouseout", function( event ) {
+	event.target.style.borderRightWidth = "5px";
+	event.target.style.right = "0px";
+});
+
+
+trimUp.addEventListener("click", function(){
+	removeFromHistory("start");
+}, false);
+
+trimDown.addEventListener("click", function(){
+	removeFromHistory("end");
+}, false);
+
+function fixFirstHandle(){
+	var swatch = document.getElementById('rowString').childNodes;
+	// swatch[0].addEventListener("mouseover", function( event ) {
+		// event.target.style.borderColor = "rgba(255, 255, 255, 0.75)";
+		var handle = swatch[0].childNodes;
+		handle[1].style.display = "none";
+		var slider = handle[0].childNodes;
+		slider[0].style.borderColor = "transparent";
+		var lastHandle = swatch[(colorHistory.length - 1)].childNodes;
+		lastHandle[1].style.display = "none";
+		var lastSlider = lastHandle[0].childNodes;
+		lastSlider[0].style.borderColor = "transparent";
+		// handle[0].style.borderColor = "rgba(255, 255, 255, .25)";
+	};
+
+function refreshAllHandles(){
+	var swatch = document.getElementById('rowString').childNodes;
+	for (var index = 0; index < colorHistory.length; index++) {
+		var thisHandle = swatch[index].childNodes;
+		thisHandle[1].style.borderColor = 'transparent';
+		var thisSlider = thisHandle[0].childNodes;
+		thisSlider[0].style.borderColor = 'transparent';
+	}
+}
+
+function fixLastHighlight(){
+	var swatch = document.getElementById('rowString').childNodes;
+	swatch[(colorHistory.length - 1)].addEventListener("mouseover", function( event ) {
+		// event.target.style.borderColor = "rgba(255, 255, 255, 0.75)";
+		event.target.style.borderColor = "transparent";
+		var handle = swatch[(colorHistory.length - 1)].childNodes;
+		handle[1].style.display = 'none';
+		// handle[0].style.borderColor = "rgba(255, 255, 255, .25)";
+	});
+
+	swatch[(colorHistory.length - 1)].addEventListener("mouseout", function( event ) {
+		event.target.style.borderColor = "transparent";
+		var handle = swatch[(colorHistory.length - 1)].childNodes;
+		handle[1].style.display = 'block';
+	});
+}
+
+var swatch = document.getElementById('rowString').childNodes;
+swatch[0].addEventListener("mouseover", function( event ) {
+	event.target.style.borderColor = "transparent";
+	var handle = swatch[0].childNodes;
+	handle[1].style.display = 'none';
+});
+
+swatch[0].addEventListener("mouseout", function( event ) {
+	event.target.style.borderColor = "transparent";
+	var handle = swatch[0].childNodes;
+	handle[1].style.display = 'block';
+});
+
+trimUp.addEventListener("mouseover", function( event ) {
+	event.target.style.backgroundColor = "transparent";
+	trimUpArrow.style.borderTopWidth = "7px";
+	trimUpArrow.style.borderTopColor = "rgba(255, 255, 255, 0.75)";
+	trimUpArrow.style.top = "1px";
+	var swatch = document.getElementById('rowString').childNodes;
+	var thisCross = swatch[0].childNodes;
+	if (appName === "ILST") {
+		swatch[0].style.backgroundColor = "#323232";
+	} else if (appName === "PHXS") {
+		swatch[0].style.backgroundColor = "#535353";
+	} else if (appName === "AEFT") {
+		swatch[0].style.backgroundColor = "#232323";
+	}
+	swatch[0].style.borderColor = "red";
+	thisCross[1].style.borderColor = "red";
+	swatch[0].style.borderWidth = "1.5px";
+	thisCross[1].style.borderWidth = "1px";
+	thisCross[1].style.display = "flex";
+});
+
+trimUp.addEventListener("mouseout", function( event ) {
+	event.target.style.backgroundColor = "transparent";
+	trimUpArrow.style.borderTopWidth = "5px";
+	trimUpArrow.style.borderTopColor = "rgba(50, 50, 50, 1)";
+	trimUpArrow.style.borderTopColor = "transparent";
+	trimUpArrow.style.top = "0px";
+	var swatch = document.getElementById('rowString').childNodes;
+	swatch[0].style.backgroundColor = "#" + colorHistory[0];
+	swatch[0].style.borderColor = "transparent";
+	var thisCross = swatch[0].childNodes;
+	var thisHandle = thisCross[0].childNodes;
+	thisCross[1].style.borderColor = "transparent";
+	thisHandle[0].style.borderColor = "transparent";
+	swatch[0].style.borderWidth = "0px";
+	thisCross[1].style.borderWidth = "0px";
+	thisCross[1].style.display = "none";
+});
+
+trimDown.addEventListener("mouseover", function( event ) {
+	event.target.style.backgroundColor = "transparent";
+	trimDownArrow.style.borderBottomWidth = "7px";
+	trimDownArrow.style.borderBottomColor = "rgba(255, 255, 255, 0.75)";
+	trimDownArrow.style.bottom = "1px";
+	var swatch = document.getElementById('rowString').childNodes;
+	if (appName === "ILST") {
+		swatch[(colorHistory.length - 1)].style.backgroundColor = "#323232";
+	} else if (appName === "PHXS") {
+		swatch[(colorHistory.length - 1)].style.backgroundColor = "#535353";
+	} else if (appName === "AEFT") {
+		swatch[(colorHistory.length - 1)].style.backgroundColor = "#232323";
+	}
+	swatch[(colorHistory.length - 1)].style.borderColor = "red";
+	swatch[(colorHistory.length - 1)].style.borderWidth = "1.5px";
+	var thisCross = swatch[(colorHistory.length - 1)].childNodes;
+	thisCross[1].style.borderColor = "red";
+	thisCross[1].style.borderWidth = "1px";
+});
+
+trimDown.addEventListener("mouseout", function( event ) {
+	event.target.style.backgroundColor = "transparent";
+	trimDownArrow.style.borderBottomWidth = "5px";
+	trimDownArrow.style.borderBottomColor = "transparent";
+	trimDownArrow.style.bottom = "0px";
+	var swatch = document.getElementById('rowString').childNodes;
+	// if (count < 1) {
+		swatch[(colorHistory.length - 1)].style.backgroundColor = "#" + colorHistory[(colorHistory.length - 1)];
+		swatch[(colorHistory.length - 1)].style.borderColor = "transparent";
+		swatch[(colorHistory.length - 1)].style.borderWidth = "0px";
+		var thisCross = swatch[(colorHistory.length - 1)].childNodes;
+		var thisHandle = thisCross[0].childNodes;
+		thisCross[1].style.borderColor = "transparent";
+		thisHandle[0].style.borderColor = "transparent";
+		thisCross[1].style.borderWidth = "0px";
+		thisHandle[0].style.borderWidth = "0px";
+	fixLastHighlight();
+});
+
+
+function hideCrossesInCenter(){
+	var swatch = document.getElementById('rowString').childNodes;
+	for (var index = 1; index < colorHistory.length; index++) {
+		var thisCross = swatch[index].childNodes;
+
+		thisCross[1].style.borderColor = "transparent";
+		console.log(index);
+	}
+}
+
+function resetAllCrossesAndStrokes(){
+	var swatch = document.getElementById('rowString').childNodes;
+	for (var index = 0; index < colorHistory.length; index++) {
+		var thisCross = swatch[index].childNodes;
+		thisCross[1].style.borderColor = "transparent";
+		swatch[index].style.borderColor = "rgba(255, 255, 255, 0.25)";
+	}
+}
+
+// function hideCrossesByChild(){
+// 	var swatch = document.getElementById('rowString').childNodes;
+// 	for (var index = maxNumber; colorHistory.length <= index; index--) {
+// 		var thisCross = swatch[index].childNodes;
+// 		thisCross[1].style.borderColor = "transparent";
+// 		swatch.style.borderColor = "rgba(255, 255, 255, 0.25)";
+// 	}
+	// swatch[(colorHistory.length - 1)].style.backgroundColor = "grey";
+	// var thisCross = swatch[(colorHistory.length - 1)].childNodes;
+	// thisCross[1].style.borderColor = "transparent";
+// }
+
+
+//
 
 // https://www.davidebarranca.com/2014/01/html-panels-tips-2-including-multiple-jsx/
 function loadJSX(fileName) {

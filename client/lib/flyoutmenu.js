@@ -15,11 +15,16 @@ var appName = csInterface.hostEnvironment.appName;
 var isChecked = true;
 var isFlipped = true;
 var isHighlight = false;
+var isSnip = false;
 
 if (appName === "ILST") {
   var menuXML = '<Menu> \
+    <MenuItem Id="snipping" Label="Snip on/off" Enabled="true" Checked="false"/> \
     <MenuItem Id="scanning" Label="Scan on/off" Enabled="true" Checked="true"/> \
-    <MenuItem Id="highlighting" Label="Highlight on/off" Enabled="false" Checked="true"/> \
+    <MenuItem Id="highlighting" Label="Highlight on/off" Enabled="true" Checked="false"/> \
+    \
+    <MenuItem Label="---" /> \
+    \
     <MenuItem Id="snatchColors" Label="Snatch all colors" Enabled="true" Checked="false"/> \
     <MenuItem Id="snatchSelection" Label="Snatch selected colors" Enabled="true" Checked="false"/> \
     <MenuItem Id="flipHandles" Label="Flip handles" Enabled="false" Checked="false"/> \
@@ -42,7 +47,11 @@ if (appName === "ILST") {
   </Menu>';
 } else {
   var menuXML = '<Menu> \
+    <MenuItem Id="snipping" Label="Snip on/off" Enabled="true" Checked="false"/> \
     <MenuItem Id="scanning" Label="Scan on/off" Enabled="true" Checked="true"/> \
+    \
+    <MenuItem Label="---" /> \
+    \
     <MenuItem Id="refreshPanel" Label="Refresh panel" Enabled="true" Checked="false"/> \
     <MenuItem Id="showHistory" Label="Log current history" Enabled="true" Checked="false"/> \
     <MenuItem Id="flipHandles" Label="Flip handles" Enabled="false" Checked="false"/> \
@@ -97,6 +106,16 @@ function setPanelCallback(event) {
       scannerToggle("On");
     } else {
       scannerToggle("Off");
+    }
+  } else if (event.data.menuId=="snipping") {
+    isSnip = !isSnip;
+    csInterface.updatePanelMenuItem("Snip on/off", true, isSnip);
+    if (isSnip) {
+      snippingToggle("On");
+      console.log("snipping on");
+    } else {
+      snippingToggle("Off");
+      console.log("snipping off");
     }
   }
   // console.log(event.data.menuId + " clicked");

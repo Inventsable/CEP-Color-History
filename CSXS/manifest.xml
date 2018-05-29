@@ -53,7 +53,7 @@
               </MinSize>
               <MaxSize>
                   <Height>900</Height>
-                  <Width>200</Width>
+                  <Width>50</Width>
               </MaxSize>
           </Geometry>
           <Icons />

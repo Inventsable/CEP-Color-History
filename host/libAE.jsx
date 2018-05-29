@@ -6,3 +6,7 @@
 var items = app.project.items;
 var myComp = app.project.activeItem;
 // var nameOfComp = myComp.name;
+
+function msgAE(){
+  return "I'm working";
+}

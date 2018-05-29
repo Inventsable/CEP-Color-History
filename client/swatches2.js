@@ -1,6 +1,7 @@
 var listHold = document.getElementById('listHold');
 var maxNumber = 29;
 var onHandle = false;
+var onSnip = false;
 var csInterface = new CSInterface();
 var appName = csInterface.hostEnvironment.appName;
 var highlight = false;
@@ -17,6 +18,8 @@ function generateSwatches(direction) {
 		var listItem = document.createElement("li");
 		var sliderItem = document.createElement("div");
 		var handleItem = document.createElement("div");
+		var sliderSnip = document.createElement("div");
+		var handleSnip = document.createElement("div");
 		var crossItem = document.createElement("div");
 		listItem.id = "swatch" + currNumber;
 		listItem.classList.add("swatch");
@@ -26,6 +29,14 @@ function generateSwatches(direction) {
 		handleItem.id = "handle" + currNumber;
 		handleItem.classList.add("handle");
 		sliderItem.appendChild(handleItem);
+
+		sliderSnip.id = "sliderSnip" + currNumber;
+		sliderSnip.classList.add("sliderSnip");
+		listItem.appendChild(sliderSnip);
+		handleSnip.id = "handleSnip" + currNumber;
+		handleSnip.classList.add("handleSnip");
+		sliderSnip.appendChild(handleSnip);
+
 		crossItem.id = "cross" + currNumber;
 		crossItem.classList.add("cross");
 		listItem.appendChild(crossItem);
@@ -84,6 +95,8 @@ function assignSwatches(){
 			var thisSwatch = document.getElementById("swatch" + index);
 			var thisSlider = document.getElementById("slider" + index);
 			var thisHandle = document.getElementById("handle" + index);
+			var snipSlider = document.getElementById("sliderSnip" + index);
+			var snipHandle = document.getElementById("handleSnip" + index);
 			// thisSwatch.addEventListener("click", function(){swatchClick(index)});
 			thisSwatch.addEventListener("click", function(event) {
 				var newColor = event.target.style.backgroundColor;
@@ -121,8 +134,70 @@ function assignSwatches(){
 			thisHandle.addEventListener("click", function(){swatchHandleClick(index)});
 			thisHandle.addEventListener("mouseover", function(){swatchHandleOn(index)});
 			thisHandle.addEventListener("mouseout", function(){swatchHandleOff(index)});
+
+			snipSlider.addEventListener("mouseover", function(){snipSliderOn(index)});
+			snipSlider.addEventListener("mouseout", function(){snipSliderOff(index)});
+			// snipHandle.addEventListener("click", function(){snipClick(index)});
+
+			snipHandle.addEventListener("click", function(event) {
+				var newColor = event.target.style.backgroundColor;
+				var newParent = this.parentNode.parentNode;
+				var parentColor = newParent.parentNode.style.backgroundColor;
+				var newNumber = newParent.id.substring(6, 7);
+				// var someNumber = event.target.id;
+				// console.log(newParent.id + " and " + someNumber);
+				// var subColor = newColor.substring(4, newColor.length - 1);
+				// var rgb = subColor.split(",");
+				// if (appName === "ILST") {
+				// 	csInterface.evalScript(`htmlRGBToHex(${rgb[0]},${rgb[1]},${rgb[2]})`, snippingColor)
+				// } else if (appName === "PHXS") {
+				// 	csInterface.evalScript(`htmlRGBToHexPS(${rgb[0]},${rgb[1]},${rgb[2]})`, snippingColor)
+				// }
+				if (onSnip === true) {
+					console.log((newNumber - 1) + " is " + colorHistory[(newNumber - 1)]);
+					colorHistory.splice((newNumber - 1), 1);
+					console.log("current history is: " + colorHistory);
+					updateHistory();
+
+					// console.log(`htmlRGBToHex(${rgb[0]},${rgb[1]},${rgb[2]})`);
+				}
+			}, false);
+
+			snipHandle.addEventListener("mouseover", function(){snipHandleOn(index)});
+			snipHandle.addEventListener("mouseout", function(){snipHandleOff(index)});
 		})(index);
 	}
+}
+
+function snippingColor(newColor){
+	if (appName === "PHXS") {
+		newColor = newColor.toUpperCase();
+	}
+	for (var index = 0; index < colorHistory.length; index++){
+		if (newColor !== colorHistory[index]) {
+			continue
+		} else {
+			var currIndex = index;
+			var thisColor = colorHistory[currIndex];
+			console.log(thisColor + " is at " + currIndex);
+			break;
+		}
+	}
+	console.log("snip number " + currIndex + ", color:#" + thisColor);
+}
+
+
+function recolorHandles(){
+	var swatches = document.getElementById('rowString').childNodes;
+	for (var index = 0; index < swatches.length; index++) {
+		var sliders = swatches[index].childNodes;
+		var handles = sliders[0].childNodes;
+		if (appName === "ILST") {
+			handles[0].style.backgroundColor = "#262626";
+		}
+		console.log("this is " + handles[0].style.backgroundColor);
+	}
+	console.log("Recolored");
 }
 
 function newColorFromPS(newColor){
@@ -131,6 +206,9 @@ function newColorFromPS(newColor){
 }
 
 function sendColor(newColor){
+	if (newColor.length > 6) {
+		return
+	}
 	if (appName === "PHXS") {
 		newColor = newColor.toUpperCase();
 	}
@@ -183,9 +261,78 @@ function dimColor(newColor){
 }
 
 
+
+function snipSliderOn(index) {
+	var thisHandle = document.getElementById('handleSnip' + index);
+	// if (appName === "ILST") {
+	// 	thisHandle.style.backgroundColor = "#262626";
+	// } else if (appName === "PHXS") {
+	// 	thisHandle.style.backgroundColor = "rgba(46, 46, 46, 1)";
+	// } else if (appName === "AEFT") {
+	// 	thisHandle.style.backgroundColor = "#161616";
+	// }
+	thisHandle.style.backgroundColor = "red";
+	thisHandle.style.borderColor = "rgba(255, 255, 255, .25)";
+	thisHandle.style.width = "80%";
+	thisHandle.style.cursor = "grab";
+}
+
+function snipSliderOff(index) {
+	var thisHandle = document.getElementById('handleSnip' + index);
+	thisHandle.style.backgroundColor = "transparent";
+	thisHandle.style.borderColor = "transparent";
+	thisHandle.style.width = "0%";
+}
+
+// function snipClick( function ( event ) {
+// 	var newColor = event.target.style.backgroundColor;
+// 	var subColor = newColor.substring(4, newColor.length - 1);
+// 	var rgb = subColor.split(",");
+// 	if (onHandle !== true) {
+// 		csInterface.evalScript(`htmlRGBToHex(${rgb[0]},${rgb[1]},${rgb[2]})`, dimColor)
+// 	}
+// }
+//
+// 	index) {
+// 	var thisHandle = document.getElementById('handleSnip' + index);
+// 	var checkColor = swatch[(index - 1)].style.backgroundColor;
+// 	console.log(checkColor);
+// }
+
+function snipHandleOn(index) {
+	var swatch = document.getElementById('rowString').childNodes;
+	onSnip = true;
+	if (onSnip) {
+		var thisHandle = swatch[index].childNodes;
+		// swatch[index].style.borderColor = "red";
+		console.log("snip handle");
+		swatch[(index - 1)].style.backgroundColor = "#323232";
+		swatch[(index - 1)].style.borderColor = "red";
+		swatch[(index - 1)].style.borderWidth = "1px";
+	}
+}
+
+function snipHandleOff(index) {
+	onSnip = false;
+	var thisHandle = document.getElementById('handle' + index);
+	swatch[(index - 1)].style.borderColor = "transparent";
+	swatch[(index - 1)].style.backgroundColor = "#" + colorHistory[(index - 1)];
+	swatch[(index - 1)].style.borderColor = "transparent";
+	swatch[(index - 1)].style.borderWidth = "0px";
+}
+
+
+
+
 function swatchSliderOn(index) {
 	var thisHandle = document.getElementById('handle' + index);
-	thisHandle.style.backgroundColor = "rgba(46, 46, 46, 1)";
+	if (appName === "ILST") {
+		thisHandle.style.backgroundColor = "#262626";
+	} else if (appName === "PHXS") {
+		thisHandle.style.backgroundColor = "rgba(46, 46, 46, 1)";
+	} else if (appName === "AEFT") {
+		thisHandle.style.backgroundColor = "#161616";
+	}
 	thisHandle.style.borderColor = "rgba(255, 255, 255, .25)";
 	thisHandle.style.width = "80%";
 	thisHandle.style.cursor = "grab";
