@@ -159,16 +159,14 @@ ul {
 
 .sliderSnip {
   display: flex;
-  /* background-color: green; */
   justify-content: flex-end;
   position: relative;
   bottom: 1px;
   left: 1px;
   width: 40%;
-  /* margin-left: 50%; */
   height: inherit;
   align-items: center;
-  z-index: 10;
+  /* z-index: 10; */
 }
 
 .handle {

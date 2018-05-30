@@ -72,22 +72,6 @@ function alertResult(params) {
 }
 
 
-function snippingToggle(params) {
-	// var swatch = document.getElementById('rowString').childNodes;
-	for (var index = 1; index <= maxNumber; index++) {
-		// should be child, not id, based
-		var thisHandle = document.getElementById('handleSnip' + index);
-		if (params === "On") {
-			thisHandle.style.display = "block";
-		} else {
-			thisHandle.style.display = "none";
-		}
-	}
-	if (params === "On") {
-		updateHistory();
-	}
-}
-
 function scannerToggle(params) {
 	if (params === "On") {
 		if (appName === "PHXS") {
@@ -254,15 +238,17 @@ function rewriteColors(params) {
 
 function updateHistory(){
 	var thisHistory = "colorHistory" + historyIndex;
+	healHistory();
 	setCookie(thisHistory, colorHistory, 30);
-	hideSwatches();
+	// hideSwatches();
 	hideSwatchesByChild();
 	colorSwatchesByChild();
 }
 
 function addToHistory(location, color) {
 	addNewSwatch();
-	showSwatches();
+	// showSwatches();
+	healHistory();
 	updateCookies(historyIndex, "add", location, color);
 	colorSwatchesByChild();
 	console.log("History " + historyIndex + " is: " + getCookie("colorHistory" + historyIndex));
@@ -270,8 +256,9 @@ function addToHistory(location, color) {
 
 function removeFromHistory(location) {
 	removeLastSwatch();
+	healHistory();
 	updateCookies(historyIndex, "remove", location, "000000");
-	hideSwatches();
+	// hideSwatches();
 	hideSwatchesByChild();
 	colorSwatchesByChild();
 	console.log("History " + historyIndex + " is: " + getCookie("colorHistory" + historyIndex));
@@ -283,7 +270,8 @@ function nextHistory(){
 	}
 	historyIndex++;
 	convertCookiesToHistory(historyIndex);
-	hideSwatches();
+	healHistory();
+	// hideSwatches();
 	showSwatches();
 	hideSwatchesByChild();
 	colorSwatchesByChild();
@@ -305,8 +293,9 @@ function previousHistory(){
 	}
 	historyIndex--;
 	convertCookiesToHistory(historyIndex);
-	hideSwatches();
-	showSwatches();
+	healHistory();
+	// hideSwatches();
+	// showSwatches();
 	hideSwatchesByChild();
 	colorSwatchesByChild();
 	console.log("history index:" + historyIndex);
@@ -479,7 +468,7 @@ trimUp.addEventListener("mouseover", function( event ) {
 	trimUpArrow.style.borderTopWidth = "7px";
 	trimUpArrow.style.borderTopColor = "rgba(255, 255, 255, 0.75)";
 	trimUpArrow.style.top = "1px";
-	// var swatch = document.getElementById('rowString').childNodes;
+	var swatch = document.getElementById('rowString').childNodes;
 	var thisCross = swatch[0].childNodes;
 	if (appName === "ILST") {
 		swatch[0].style.backgroundColor = "#323232";
@@ -501,7 +490,7 @@ trimUp.addEventListener("mouseout", function( event ) {
 	trimUpArrow.style.borderTopColor = "rgba(50, 50, 50, 1)";
 	trimUpArrow.style.borderTopColor = "transparent";
 	trimUpArrow.style.top = "0px";
-	// var swatch = document.getElementById('rowString').childNodes;
+	var swatch = document.getElementById('rowString').childNodes;
 	swatch[0].style.backgroundColor = "#" + colorHistory[0];
 	swatch[0].style.borderColor = "transparent";
 	var thisCross = swatch[0].childNodes;
