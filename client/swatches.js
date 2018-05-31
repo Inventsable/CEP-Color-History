@@ -1,3 +1,11 @@
+/**
+ * @requires CSInterface.js
+ * @requires exLibs.js
+ * @requires cookies.js
+ * @requires colorlogic.js
+ **/
+
+
 var listHold = document.getElementById('listHold');
 var maxNumber = 29;
 var onHandle = false;
@@ -81,6 +89,13 @@ function whichChild(elem){
     return i;
 }
 
+function fixFirstHandle(){
+	var swatchNext = document.getElementsByClassName('swatch');
+	var thisSlider = swatchNext[0].childNodes;
+	var thisHandle = thisSlider[0].childNodes;
+	// thisHandle.style.left = "3px";
+}
+
 function assignSwatches(){
 	var swatch = document.getElementById('rowString').childNodes;
 	for (var index = maxNumber - 1; index >= 0; index--) {
@@ -140,8 +155,6 @@ function assignSwatches(){
 				var thisNumber = whichChild(this.parentNode.parentNode);
 				swatchHandleOff(thisNumber)
 			}, false);
-
-
 
 			thisSlider[1].addEventListener("mouseover", function(event){
 				var thisNumber = whichChild(this.parentNode);
@@ -231,11 +244,14 @@ function snippingColor(newColor){
 }
 
 function recolorHandles(){
+	fixFirstHandle();
 	for (var index = 0; index < swatch.length; index++) {
 		var sliders = swatch[index].childNodes;
 		var handles = sliders[0].childNodes;
 		if (appName === "ILST") {
-			handles[0].style.backgroundColor = "#262626";
+			handles[0].style.backgroundColor = AIpanel_nav;
+		} else if (appName === "PHXS") {
+			handles[0].style.backgroundColor = PSpanel_nav;
 		}
 	}
 	console.log("Handles synced to " + appName);
@@ -329,36 +345,26 @@ function movingToggle(params) {
 
 function snipSliderOn(index) {
 	var swatch = document.getElementById('rowString').childNodes;
-	// onSnip === true;
-	console.log("snip slider is on " + index);
 	var thisSlider = swatch[index].childNodes;
 	var thisHandle = thisSlider[1].childNodes;
-	// if (onSnip) {
-	// 	thisHandle[0].style.display = "block";
-	// } else {
-	// 	thisHandle[0].style.display = "none";
-	// }
-
 	thisHandle[0].style.backgroundColor = "red";
 	thisHandle[0].style.width = "80%";
-	// thisHandle[0].style.cursor = "grab";
-	console.log("status: " + onSnip);
 }
 
 function snipSliderOff(index) {
 	var thisSlider = swatch[index].childNodes;
 	var thisHandle = thisSlider[1].childNodes;
-	// thisHandle[0].style.display = "none";
-	// thisHandle[0].style.backgroundColor = "transparent";
-	// thisHandle[0].style.borderColor = "transparent";
 	thisHandle[0].style.width = "0%";
 }
 
 function snipHandleOn(index) {
 	onSnip = true;
 	if (onSnip) {
-		console.log("snip handle on " + index);
-		swatch[index].style.backgroundColor = "#323232";
+		if (appName === "ILST") {
+			swatch[index].style.backgroundColor = AIpanel_nav;
+		} else if (appName === "PHXS") {
+			swatch[index].style.backgroundColor = PSpanel_bg;
+		}
 		swatch[index].style.borderColor = "red";
 		swatch[index].style.borderWidth = "1px";
 	}
@@ -366,7 +372,6 @@ function snipHandleOn(index) {
 
 function snipHandleOff(index) {
 	onSnip = false;
-	// swatch[index].style.display = "none";
 	swatch[index].style.backgroundColor = "#" + colorHistory[index];
 	swatch[index].style.borderColor = "transparent";
 	swatch[index].style.borderWidth = "0px";
@@ -383,7 +388,6 @@ function swatchSliderOn(index) {
 	} else if (appName === "AEFT") {
 		thisHandle[index].style.backgroundColor = "#161616";
 	}
-	thisHandle[index].style.borderColor = "rgba(255, 255, 255, .25)";
 	thisHandle[index].style.width = "80%";
 	thisHandle[index].style.cursor = "grab";
 }
@@ -403,7 +407,6 @@ function swatchHandleOn(index) {
 	onHandle = true;
 	if (onHandle) {
 		var thisHandle = swatch[index].childNodes;
-		thisHandle[0].style.borderColor = "rgba(255,255,255,.25)"
 	}
 }
 
@@ -478,115 +481,3 @@ function colorSwatchesByChild() {
 		swatch[index].style.borderWidth = "0px";
 	});
 }
-
-function healHistory() {
-	var bug = 0;
-	for (var index = 0; index < colorHistory.length; index++) {
-		try {
-			if (!isAlphaNumeric(colorHistory[index])) {
-				console.log("//DIA: Alphanumeric bug at: " + colorHistory[index]);
-				if (index < 1) {
-					colorHistory.shift();
-				} else if (index === colorHistory.length) {
-					colorHistory.pop();
-				} else {
-					colorHistory.splice(index,1);
-				}
-				bug++;
-				continue;
-			}
-			if (!isHexColor(colorHistory[index])) {
-				console.log("//DIA: Invalid hex color at: " + colorHistory[index]);
-				if (index < 1) {
-					colorHistory.shift();
-				} else if (index === colorHistory.length) {
-					colorHistory.pop();
-				} else {
-					colorHistory.splice(index,1);
-				}
-				bug++;
-				continue;
-			}
-		}
-		catch (e){
-			console.log("//DIA: Undefined bug at: " + colorHistory[index]);
-			if (index < 1) {
-				colorHistory.shift();
-			} else if (index === colorHistory.length) {
-				colorHistory.pop();
-			} else {
-				colorHistory.splice(index,1);
-			}
-			bug++;
-		}
-	}
-	// console.log("//DIA: " + colorHistory.length + " passes for " + colorHistory);
-	if (bug === 0) {
-		// console.log("History is healthy");
-	} else {
-		console.log("Corrected history error");
-	}
-}
-
-function correctCookie(name) {
-	var correct = 0;
-	var num = 0;
-	var whichHistory = "colorHistory" + num;
-	var cookies = getCookie(name).split(",");
-	for (var index = 0; index < cookies.length; index++)
-	{
-		try {
-			if (typeof cookies[index] != 'undefined') {
-				if (!isHexColor(cookies[index])) {
-					if (index < 1) {
-						cookies.shift();
-					} else if (index === cookies.length) {
-						cookies.pop();
-					} else {
-						cookies.splice(index, 1)
-					}
-				} else {
-					correct++;
-				}
-			} else {
-				if (index < 1) {
-					cookies.shift();
-				} else if (index === cookies.length) {
-					cookies.pop();
-				} else {
-					cookies.splice(index, 1)
-				}
-			}
-		}
-		catch(e) {
-			if (index < 1) {
-				cookies.shift();
-			} else if (index === cookies.length) {
-				cookies.pop();
-			} else {
-				cookies.splice(index, 1)
-			}
-		}
-	}
-	setCookie(whichHistory, cookies, 30)
-}
-
-// https://stackoverflow.com/a/8027444
-function isHexColor(param) {
-	var isOk = /^[0-9A-F]{6}$/i.test(param);
-	return isOk;
-}
-
-// https://stackoverflow.com/a/25352300
-function isAlphaNumeric(str) {
-  var code, i, len;
-  for (i = 0, len = str.length; i < len; i++) {
-    code = str.charCodeAt(i);
-    if (!(code > 47 && code < 58) && // numeric (0-9)
-        !(code > 64 && code < 91) && // upper alpha (A-Z)
-        !(code > 96 && code < 123)) { // lower alpha (a-z)
-      return false;
-    }
-  }
-  return true;
-};

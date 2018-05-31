@@ -3,8 +3,6 @@
  * @requires cookies.js
  * @requires main.js
  *
- * flyoutmenu.js
- *
  * @function setPanelCallback(event)
  *
  *
@@ -12,10 +10,11 @@
 
 var csInterface = new CSInterface();
 var appName = csInterface.hostEnvironment.appName;
-var isChecked = true;
 var isFlipped = true;
 var isHighlight = false;
 
+var isScanning = true;
+window.onload = scanningToggle("On");
 var isSnip = false;
 window.onload = snippingToggle("Off");
 var isMove = false;
@@ -103,15 +102,15 @@ function setPanelCallback(event) {
     // if (isHighlight) {
       highlighter(isHighlight);
     // } else {
-      // scannerToggle("Off");
+      // scanningToggle("Off");
     // }
   } else if (event.data.menuId=="scanning") {
-    isChecked = !isChecked;
-    csInterface.updatePanelMenuItem("Scan on/off", true, isChecked);
-    if (isChecked) {
-      scannerToggle("On");
+    isScanning = !isScanning;
+    csInterface.updatePanelMenuItem("Scan on/off", true, isScanning);
+    if (isScanning) {
+      scanningToggle("On");
     } else {
-      scannerToggle("Off");
+      scanningToggle("Off");
     }
   } else if (event.data.menuId=="snipping") {
     isSnip = !isSnip;

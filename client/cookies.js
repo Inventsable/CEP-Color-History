@@ -1,8 +1,6 @@
 /**
  * @requires CSInterface.js
  *
- * cookies.js
- *
  * @function convertCookiesToHistory(num)
  *	 @param num  	    digit ("1") to set colorHistory from corresponding cookie.
  *     resets colorHistory to match cookie

@@ -91,6 +91,30 @@ function colorFromIllustrator() {
 }
 
 
+var text = ["Lorem ipsum", "test this"];
+
+function getText(){
+  if (exist && allTexts > 0){
+    for (var index = 0; index < allTexts; index++) {
+      var fails = 0;
+      for (var A_Index = 0; A_Index < text.length; A_Index++) {
+        if (doc.textFrames[index].contents !== text[A_Index]) {
+          fails++;
+        } else {
+          break;
+        }
+        if (fails === text.length) {
+          text.push(doc.textFrames[index].contents);
+        }
+      }
+    }
+    return text;
+  }
+}
+
+
+
+
 /// https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
 
 function componentToHex(c) {
@@ -112,75 +136,6 @@ function hexToRgb(hex) {
 }
 
 
-///////
-
-// function checkForFill() {
-//   if (app.isFillActive()) {
-//     alert("is fill");
-//   } else {
-//     alert("is stroke");
-//   }
-// }
-
-
-// var layer = app.activeDocument.activeLayer;
-// var testColor = new RGBColor()//initial default colour
-// testColor.red = 180;
-// testColor.green = 93;
-// testColor.blue = 120;
-// var myGrey= new CMYKColor()//initial default grey
-// myGrey.black=75;
-//
-//
-// // Stepping through each item on the layer.
-// for (var i = 0; i < layer.pathItems.length; i++) {
-//     var item = layer.pathItems[i];
-//     $.writeln("Test colour ",Math.round( item.fillColor.red))
-//     if (Math.round(item.fillColor.red) == testColor.red &&
-//     Math.round(item.fillColor.green)== testColor.green &&
-//     Math.round(item.fillColor.blue) == testColor.blue)
-//    {
-//       $.writeln("Color function",i );
-//       item.fillColor = myGrey;
-//    }
-//
-// }
-
-// colorToIllustrator(newColor)
-
-
-// alert(doc.pathItems.length);
-// alert(doc.textFrames[1].textRange.characterAttributes.stroked)
-// alert(doc.pathItems[1].stroked)
-
-// alert(doc.pathItems[1].fillColor);
-// alert(doc.pathItems[1].opacity);
-// alert(doc.layers.length);
-
-// alert(colorToIllustrator('ff0000'))
-
-
-
-// alert(rgbActiveHex("2"));
-
-// lowerOpacity('ff0000');
-// returnOpacity();
-
-// alert(doc.pathItems[0].fillColor)
-
-// alert(doc.textFrames[0].characterStyles.characterAttributes.fillColor);
-
-// var textColor = ;
-// alert(doc.textFrames[1].textRange.characterAttributes.fillColor.red)
-
-// alert(doc.textFrames[2].opacity)
-
-// alert(doc.compoundPathItems.pathItems.length)
-
-// alert(rgbActiveHex("textFrames", "2"))
-
-
-// alert(doc.pathItems[0].opacity);
 
 function rgbActiveHex(type, here) {
   var activeObject;

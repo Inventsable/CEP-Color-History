@@ -1,11 +1,9 @@
 /**
  * @requires CSInterface.js
+ * @requires exLibs.js
  * @requires cookies.js
- *
- * main.js
- *
- * Needs an if InStr(colorHistory, ",") RTrim equivalent
- * Needs gatekeeper for colorHistory to prevent undefined or null values
+ * @requires colorlogic.js
+ * @requires swatches.js
  *
  * @function addToHistory(location,color)
  *	 @param location	add to 'start' or 'end' of active colorHistory array.
@@ -45,12 +43,17 @@ var csInterface = new CSInterface();
 	var count = 0;
 	var historyIndex = 1;
 
+	var AIpanel_nav = "#262626";
+	var AIpanel_bg = "#323232";
+	var PSpanel_nav = "#2e2e2e";
+	var PSpanel_bg = "#535353";
+	var AEpanel_nav = "#161616";
+	var AEpanel_bg = "#232323";
+
 	var swatch = document.getElementById('rowString').childNodes;
 
 	window.onload = assignByApp();
 	window.onload = loadLibraries();
-
-
 
 ////////////////////////////////////
 
@@ -67,12 +70,7 @@ function loadLibraries() {
 	}
 }
 
-function alertResult(params) {
-	alert(params);
-}
-
-
-function scannerToggle(params) {
+function scanningToggle(params) {
 	if (params === "On") {
 		if (appName === "PHXS") {
 			timer = setInterval(function(){scanPSColors();}, 200);
@@ -80,46 +78,32 @@ function scannerToggle(params) {
 			toggleTimer = setInterval(function(){scanIsFill();}, 200);
 			timer = setInterval(function(){scanAIColors();}, 200);
 		}
-		console.log("scanning on");
+		console.log("Scanning on");
 	} else {
 		if (appName === "ILST") {
 			clearInterval(toggleTimer);
 		}
 		clearInterval(timer);
-		console.log("scanning off");
+		console.log("Scanning off");
 	}
 }
 
-
 function assignByApp() {
 	if (appName === "PHXS") {
-		scannerToggle("On");
 		foreground.addEventListener("click", function(){colorSetFG();}, false);
 		background.addEventListener("click", function(){colorSetBG();}, false);
 		foreground.style.backgroundColor = '#7e7e7e';
 	} else if (appName === "ILST") {
-		scannerToggle("On");
 		recolorHandles();
 		foreground.style.backgroundColor = '#b7b7b7';
 		background.style.backgroundColor = '#515151';
-		foreground.addEventListener("click", function(){csInterface.evalScript(`fillColorFromAI();`, fgResult)}, false);
-		background.addEventListener("click", function(){csInterface.evalScript(`strokeColorFromAI();`, bgResult)}, false);
+		// foreground.addEventListener("click", function(){csInterface.evalScript(`fillColorFromAI();`, fgResult)}, false);
+		// background.addEventListener("click", function(){csInterface.evalScript(`strokeColorFromAI();`, bgResult)}, false);
 	} else if (appName === "AEFT") {
 		foreground.addEventListener("click", function(){csInterface.evalScript(`msgAE();`, msgResult)}, false);
 		background.addEventListener("click", function(){location.reload();}, false);
 	}
 	colorFix();
-}
-
-function msgResult(params){
-	console.log(params);
-}
-
-function fgResult(result){
-	foreground.style.backgroundColor = "#" + result;
-}
-function bgResult(result){
-	background.style.backgroundColor = "#" + result;
 }
 
 function colorSetFG(){
@@ -294,8 +278,6 @@ function previousHistory(){
 	historyIndex--;
 	convertCookiesToHistory(historyIndex);
 	healHistory();
-	// hideSwatches();
-	// showSwatches();
 	hideSwatchesByChild();
 	colorSwatchesByChild();
 	console.log("history index:" + historyIndex);
@@ -341,42 +323,44 @@ function scanResult(params){
 }
 
 function colorFix(){
+	var AIpanel_nav = "#262626";
+	var AIpanel_bg = "#323232";
+	var PSpanel_nav = "#2e2e2e";
+	var PSpanel_bg = "#535353";
+	var AEpanel_nav = "#161616";
+	var AEpanel_bg = "#232323";
+	var htmlBody = document.getElementsByTagName("html");
+	var body = document.getElementsByTagName("body");
+	var nav = document.getElementById("nav");
+	var historyPick = document.getElementById('historyPick');
+	var content = document.getElementById("content");
+	var rowString = document.getElementsByClassName("rowString");
+	historyPick.style.backgroundColor = "transparent";
+	backArea.style.backgroundColor = "transparent";
+	backArrow.style.borderColor = "transparent";
+	forwardArea.style.backgroundColor = "transparent";
+	forwardArrow.style.borderColor = "transparent";
 	if (appName === "ILST") {
-		var htmlBody = document.getElementsByTagName("html");
 		htmlBody[0].style.backgroundColor = "#323232";
-		var body = document.getElementsByTagName("body");
-		body[0].style.backgroundColor = "#323232";
-		var nav = document.getElementById("nav");
-		nav.style.backgroundColor = "#262626";
-		var content = document.getElementById("content");
-		content.style.backgroundColor = "#323232";
-		var rowString = document.getElementsByClassName("rowString");
-		rowString[0].style.backgroundColor = "#323232";
+		body[0].style.backgroundColor = AIpanel_bg;
+		nav.style.backgroundColor = AIpanel_nav;
+		content.style.backgroundColor = AIpanel_bg;
+		rowString[0].style.backgroundColor = AIpanel_bg;
 		innerStroke.style.display = "block";
 	} else if (appName === "PHXS") {
-		var content = document.getElementById("content");
-		backArea.style.backgroundColor = "#2e2e2e";
-		forwardArea.style.backgroundColor = "#2e2e2e";
-		content.style.backgroundColor = "#535353";
+		htmlBody[0].style.backgroundColor = PSpanel_bg;
+		body[0].style.backgroundColor = PSpanel_bg;
+		nav.style.backgroundColor = PSpanel_nav;
+		content.style.backgroundColor = PSpanel_bg;
+		rowString[0].style.backgroundColor = PSpanel_bg;
 		innerStroke.style.display = "none";
 	} else if (appName === "AEFT") {
-		var htmlBody = document.getElementsByTagName("html");
-		htmlBody[0].style.backgroundColor = "#232323";
-		var body = document.getElementsByTagName("body");
-		body[0].style.backgroundColor = "#232323";
-		var nav = document.getElementById("nav");
-		nav.style.backgroundColor = "#161616";
-		var content = document.getElementById("content");
-		content.style.backgroundColor = "#232323";
-		var rowString = document.getElementsByClassName("rowString");
-		rowString[0].style.backgroundColor = "#232323";
+		htmlBody[0].style.backgroundColor = AEpanel_bg;
+		body[0].style.backgroundColor = AEpanel_bg;
+		nav.style.backgroundColor = AEpanel_nav;
+		content.style.backgroundColor = AEpanel_bg;
+		rowString[0].style.backgroundColor = AEpanel_bg;
 		innerStroke.style.display = "none";
-		var historyPick = document.getElementById('historyPick');
-		historyPick.style.backgroundColor = "transparent";
-		backArea.style.backgroundColor = "transparent";
-		backArrow.style.borderColor = "transparent";
-		forwardArea.style.backgroundColor = "transparent";
-		forwardArrow.style.borderColor = "transparent";
 		resizePanelForAE();
 	}
 }
@@ -450,7 +434,6 @@ trimDown.addEventListener("click", function(){
 	removeFromHistory("end");
 }, false);
 
-// var swatch = document.getElementById('rowString').childNodes;
 swatch[0].addEventListener("mouseover", function( event ) {
 	event.target.style.borderColor = "transparent";
 	var handle = swatch[0].childNodes;
@@ -464,28 +447,23 @@ swatch[0].addEventListener("mouseout", function( event ) {
 });
 
 trimUp.addEventListener("mouseover", function( event ) {
-	event.target.style.backgroundColor = "transparent";
 	trimUpArrow.style.borderTopWidth = "7px";
 	trimUpArrow.style.borderTopColor = "rgba(255, 255, 255, 0.75)";
 	trimUpArrow.style.top = "1px";
 	var swatch = document.getElementById('rowString').childNodes;
 	var thisCross = swatch[0].childNodes;
 	if (appName === "ILST") {
-		swatch[0].style.backgroundColor = "#323232";
+		swatch[0].style.backgroundColor = AIpanel_bg;
 	} else if (appName === "PHXS") {
-		swatch[0].style.backgroundColor = "#535353";
+		swatch[0].style.backgroundColor = PSpanel_bg;
 	} else if (appName === "AEFT") {
-		swatch[0].style.backgroundColor = "#232323";
+		swatch[0].style.backgroundColor = AEpanel_bg;
 	}
 	swatch[0].style.borderColor = "red";
-	thisCross[1].style.borderColor = "red";
 	swatch[0].style.borderWidth = "1.5px";
-	thisCross[1].style.borderWidth = "1px";
-	thisCross[1].style.display = "flex";
 });
 
 trimUp.addEventListener("mouseout", function( event ) {
-	event.target.style.backgroundColor = "transparent";
 	trimUpArrow.style.borderTopWidth = "5px";
 	trimUpArrow.style.borderTopColor = "rgba(50, 50, 50, 1)";
 	trimUpArrow.style.borderTopColor = "transparent";
@@ -493,13 +471,7 @@ trimUp.addEventListener("mouseout", function( event ) {
 	var swatch = document.getElementById('rowString').childNodes;
 	swatch[0].style.backgroundColor = "#" + colorHistory[0];
 	swatch[0].style.borderColor = "transparent";
-	var thisCross = swatch[0].childNodes;
-	var thisHandle = thisCross[0].childNodes;
-	thisCross[1].style.borderColor = "transparent";
-	thisHandle[0].style.borderColor = "transparent";
 	swatch[0].style.borderWidth = "0px";
-	thisCross[1].style.borderWidth = "0px";
-	thisCross[1].style.display = "none";
 });
 
 trimDown.addEventListener("mouseover", function( event ) {
@@ -507,19 +479,15 @@ trimDown.addEventListener("mouseover", function( event ) {
 	trimDownArrow.style.borderBottomWidth = "7px";
 	trimDownArrow.style.borderBottomColor = "rgba(255, 255, 255, 0.75)";
 	trimDownArrow.style.bottom = "1px";
-	// var swatch = document.getElementById('rowString').childNodes;
 	if (appName === "ILST") {
-		swatch[(colorHistory.length - 1)].style.backgroundColor = "#323232";
+		swatch[(colorHistory.length - 1)].style.backgroundColor = AIpanel_bg;
 	} else if (appName === "PHXS") {
-		swatch[(colorHistory.length - 1)].style.backgroundColor = "#535353";
+		swatch[(colorHistory.length - 1)].style.backgroundColor = PSpanel_bg;
 	} else if (appName === "AEFT") {
-		swatch[(colorHistory.length - 1)].style.backgroundColor = "#232323";
+		swatch[(colorHistory.length - 1)].style.backgroundColor = AEpanel_bg;
 	}
 	swatch[(colorHistory.length - 1)].style.borderColor = "red";
 	swatch[(colorHistory.length - 1)].style.borderWidth = "1.5px";
-	var thisCross = swatch[(colorHistory.length - 1)].childNodes;
-	thisCross[1].style.borderColor = "red";
-	thisCross[1].style.borderWidth = "1px";
 });
 
 trimDown.addEventListener("mouseout", function( event ) {
@@ -527,33 +495,7 @@ trimDown.addEventListener("mouseout", function( event ) {
 	trimDownArrow.style.borderBottomWidth = "5px";
 	trimDownArrow.style.borderBottomColor = "transparent";
 	trimDownArrow.style.bottom = "0px";
-	// var swatch = document.getElementById('rowString').childNodes;
-	// if (count < 1) {
 		swatch[(colorHistory.length - 1)].style.backgroundColor = "#" + colorHistory[(colorHistory.length - 1)];
 		swatch[(colorHistory.length - 1)].style.borderColor = "transparent";
 		swatch[(colorHistory.length - 1)].style.borderWidth = "0px";
-		var thisCross = swatch[(colorHistory.length - 1)].childNodes;
-		var thisHandle = thisCross[0].childNodes;
-		thisCross[1].style.borderColor = "transparent";
-		thisHandle[0].style.borderColor = "transparent";
-		thisCross[1].style.borderWidth = "0px";
-		thisHandle[0].style.borderWidth = "0px";
 });
-
-
-// https://www.davidebarranca.com/2014/01/html-panels-tips-2-including-multiple-jsx/
-function loadJSX(fileName) {
-    var csInterface = new CSInterface();
-    var extensionRoot = csInterface.getSystemPath(SystemPath.EXTENSION) + "/host/";
-    csInterface.evalScript('$.evalFile("' + extensionRoot + fileName + '")');
-		console.log("loading " + extensionRoot + fileName);
-}
-
-//  https://stackoverflow.com/a/6211660
-function isEven(n) {
-	 return n % 2 == 0;
-}
-
-function isOdd(n) {
-	 return Math.abs(n % 2) == 1;
-}

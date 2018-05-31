@@ -15,25 +15,11 @@ body {
   margin: 0px;
   max-width: 60rem;
   overflow: hidden;
-  /* width:100%; */
 }
 
 ul {
   list-style-type: none;
 }
-
-/* .cross {
-  display: block;
-  position: relative;
-  left: 2px;
-  bottom: 3px;
-  width: 0px;
-  height: 135%;
-  transform: rotate(45deg);
-  border: 0px solid transparent;
-  transition: border-color 100ms ease-in 0ms,
-              display 100ms ease-in 0ms;
-} */
 
 .content {
   width: 100%;
@@ -52,7 +38,6 @@ ul {
 
 .bounds {
   position: relative;
-  /* right: 1px; */
   width: 4rem;
   height: 4rem;
   display: flex;
@@ -98,7 +83,6 @@ ul {
   position: relative;
   left: .15px;
   top: .15px;
-  /* bottom: .25px; */
   width: 6px;
   height: 6px;
   border: 1px solid var(--idle-outline-color);
@@ -128,7 +112,6 @@ ul {
   justify-content: center;
   flex-wrap: wrap;
 }
-
 
 .swatch {
   display: flex;
@@ -166,14 +149,12 @@ ul {
   width: 40%;
   height: inherit;
   align-items: center;
-  /* z-index: 10; */
 }
 
 .handle {
   position: relative;
-  /* bottom: .5px; */
   top: 1px;
-  right: 3px;
+  right: 2px;
   width: 0%;
   height: inherit;
   background-color: transparent;
@@ -181,16 +162,14 @@ ul {
   transition: width 100ms linear 20ms,
     border-color 100ms ease-in 0ms,
     background-color 100ms ease-in 0ms;
-  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: move;
 }
 
 .handleSnip {
   position: relative;
-  /* bottom: .5px; */
   border: 2px solid red;
   top: 1px;
-  left: 3px;
-  /* margin-left: 50%; */
+  left: -1px;
   width: 80%;
   height: inherit;
   background-color: transparent;
@@ -202,36 +181,20 @@ ul {
   z-index: 10;
 }
 
-
-
 .handle:active {
   cursor: move;
-  /* cursor: grabbing; */
-  /* cursor: -webkit-grabbing; */
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
 }
-
-/* #handle1:hover, #handle2:hover, #handle3:hover, #handle4:hover, #handle5:hover {
-    cursor: grab;
-}
-
-#handle1:active, #handle2:active, #handle3:active, #handle4:active, #handle5:active {
-    cursor: grabbing;
-} */
 
 .swatch:hover {
-    border-color: var(--hover-outline-color);
     width: 4rem;
     height: 4rem;
     margin-top: .3125rem;
-    -webkit-filter: drop-shadow(.5rem .5rem .3125rem rgba(0,0,0,0.3125));
-}
-
-.swatch:active {
-    background-color: white;
+    -webkit-filter: drop-shadow(0rem .4rem .3125rem rgba(0,0,0,0.3125));
 }
 
 .trimUp, .trimDown {
-  /* border: 2px solid red; */
   height: 2rem;
   width: 80%;
   display: flex;
@@ -252,7 +215,6 @@ ul {
   transition: border 100ms ease-in 20ms,
               top 100ms ease-in 0ms,
               bottom 100ms ease-in 0ms;
-    /* border- 100ms ease-in 0ms, */
 }
 
 .colorPick {
@@ -262,7 +224,7 @@ ul {
 }
 
 .historyPick {
-  /* border: 2px solid red; */
+  background-color: transparent;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -270,7 +232,6 @@ ul {
 
 .backArea, .forwardArea {
   width: 50%;
-  /* border: 2px solid blue; */
   background-color: transparent;
   display: flex;
   justify-content: center;
@@ -294,31 +255,12 @@ ul {
 }
 
 .tri-up {
-  border-bottom: 5px solid var(--idle-color);
+  border-bottom: 5px solid transparent;
 }
-
-/* .tri-up:hover {
-  bottom: 1px;
-  border-bottom: 7px solid var(--hover-color);
-} */
 
 .tri-down {
-  border-top: 5px solid var(--idle-color);
+  border-top: 5px solid transparent;
 }
-
-/* .tri-down:hover {
-  top: 1px;
-  border-top: 7px solid var(--hover-color);
-} */
-
-/* @media only screen and (max-width: 110px){
-  .rowString {
-    padding-top: 4px;
-  }
-  .swatch {
-    margin: 0%;
-  }
-} */
 
 @media only screen and (max-width: 144px){
   .rowString {
@@ -329,7 +271,6 @@ ul {
       margin: 3%;
   }
 }
-
 
 @media only screen and (max-width: 102px){
   .rowString {
@@ -350,28 +291,11 @@ ul {
     margin: 0%;
   }
 
-  /* .cross {
-    left: 2px;
-    bottom: 3px;
-    width: 0px;
-    height: 135%;
-    transform: rotate(45deg);
-  } */
-
   .trimUp, .trimDown {
     justify-content: flex-start;
     margin-left: 15%;
-    /* align-items: center; */
   }
 }
-
-/* @media only screen and (max-width: 68px){
-  .rowString {
-    padding-left: 5px;
-    padding-right: 5px;
-  }
-} */
-
 
 @media only screen and (max-width: 66px){
   .trimUp, .trimDown {
@@ -408,13 +332,6 @@ ul {
     width: 100%;
     margin-top: 0rem;
   }
-
-  /* .cross {
-    left: 5px;
-    bottom: 7px;
-    height: 180%;
-    transform: rotate(57deg);
-  } */
 
   .trimUp, .trimDown {
     justify-content: center;
