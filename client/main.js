@@ -49,7 +49,7 @@ var csInterface = new CSInterface();
 
 	window.onload = assignByApp();
 	window.onload = loadLibraries();
-	window.onload = snippingToggle("Off");
+
 
 
 ////////////////////////////////////

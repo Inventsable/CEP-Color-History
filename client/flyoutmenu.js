@@ -15,10 +15,15 @@ var appName = csInterface.hostEnvironment.appName;
 var isChecked = true;
 var isFlipped = true;
 var isHighlight = false;
+
 var isSnip = false;
+window.onload = snippingToggle("Off");
+var isMove = false;
+window.onload = movingToggle("Off");
 
 if (appName === "ILST") {
   var menuXML = '<Menu> \
+    <MenuItem Id="moving" Label="Move on/off" Enabled="true" Checked="false"/> \
     <MenuItem Id="snipping" Label="Snip on/off" Enabled="true" Checked="false"/> \
     <MenuItem Id="scanning" Label="Scan on/off" Enabled="true" Checked="true"/> \
     <MenuItem Id="highlighting" Label="Highlight on/off" Enabled="false" Checked="false"/> \
@@ -47,6 +52,7 @@ if (appName === "ILST") {
   </Menu>';
 } else {
   var menuXML = '<Menu> \
+    <MenuItem Id="moving" Label="Move on/off" Enabled="true" Checked="true"/> \
     <MenuItem Id="snipping" Label="Snip on/off" Enabled="true" Checked="false"/> \
     <MenuItem Id="scanning" Label="Scan on/off" Enabled="true" Checked="true"/> \
     \
@@ -115,6 +121,16 @@ function setPanelCallback(event) {
       // console.log("snipping on");
     } else {
       snippingToggle("Off");
+      // console.log("snipping off");
+    }
+  } else if (event.data.menuId=="moving") {
+    isMove = !isMove;
+    csInterface.updatePanelMenuItem("Move on/off", true, isMove);
+    if (isMove) {
+      movingToggle("On");
+      // console.log("snipping on");
+    } else {
+      movingToggle("Off");
       // console.log("snipping off");
     }
   }

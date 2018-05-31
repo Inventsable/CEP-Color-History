@@ -122,6 +122,12 @@ function assignSwatches(){
 				var thisNumber = whichChild(this.parentNode);
 				swatchSliderOff(thisNumber)
 			}, false);
+			thisSlider[0].addEventListener("click", function(event){
+				// if (!) {
+					var thisNumber = whichChild(this.parentNode);
+					moveAltClick(thisNumber);
+				// }
+			}, false);
 			thisHandle[0].addEventListener("click", function(event){
 				var thisNumber = whichChild(this.parentNode.parentNode);
 				swatchHandleClick(thisNumber)
@@ -177,7 +183,6 @@ function assignSwatches(){
 	}
 }
 
-
 function snipAltClick(num){
 	if (!onSnip) {
 		if (appName === "PHXS") {
@@ -191,6 +196,22 @@ function snipAltClick(num){
 		}
 	}
 }
+
+function moveAltClick(num){
+	// if (!onHandle) {
+		if (appName === "PHXS") {
+			if (isOdd(groundState)){
+				csInterface.evalScript(`fgColorToPS('${colorHistory[num]}')`);
+			} else {
+				csInterface.evalScript(`bgColorToPS('${colorHistory[num]}')`);
+			}
+		} else if (appName === "ILST") {
+			csInterface.evalScript(`giveColor('${colorHistory[num]}')`);
+		}
+	// }
+}
+
+
 
 function snippingColor(newColor){
 	if (appName === "PHXS") {
@@ -288,7 +309,23 @@ function snippingToggle(params) {
 	}
 }
 
-// Something is wrong with onSnip variable.
+function movingToggle(params) {
+	// var swatch = document.getElementById('rowString').childNodes;
+	for (var index = 0; index < maxNumber; index++) {
+		var thisHandle = document.getElementsByClassName("handle");
+		if (params === "On") {
+			thisHandle[index].style.display = "block";
+		} else {
+			thisHandle[index].style.display = "none";
+		}
+	}
+	if (params === "On") {
+		console.log("Moving on");
+		updateHistory();
+	} else {
+		console.log("Moving off");
+	}
+}
 
 function snipSliderOn(index) {
 	var swatch = document.getElementById('rowString').childNodes;
