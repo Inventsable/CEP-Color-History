@@ -207,7 +207,7 @@ function appendColors(params) {
 
 function rewriteColors(params) {
 	var insert = [];
-	console.log(`old history is: ${colorHistory}`);
+	console.log(`Deleting history: ${colorHistory}`);
 	while (colorHistory.length > 0) {
 		colorHistory.pop();
 	}
@@ -216,7 +216,8 @@ function rewriteColors(params) {
 	{
 		colorHistory.push(insert[index]);
 	}
-	console.log(`new history is: ${colorHistory}`);
+	console.log(`Snatched: ${colorHistory}`);
+	colorHistory = sortInSpectrum();
 	updateHistory();
 }
 
@@ -224,14 +225,12 @@ function updateHistory(){
 	var thisHistory = "colorHistory" + historyIndex;
 	healHistory();
 	setCookie(thisHistory, colorHistory, 30);
-	// hideSwatches();
 	hideSwatchesByChild();
 	colorSwatchesByChild();
 }
 
 function addToHistory(location, color) {
 	addNewSwatch();
-	// showSwatches();
 	healHistory();
 	updateCookies(historyIndex, "add", location, color);
 	colorSwatchesByChild();
@@ -242,7 +241,6 @@ function removeFromHistory(location) {
 	removeLastSwatch();
 	healHistory();
 	updateCookies(historyIndex, "remove", location, "000000");
-	// hideSwatches();
 	hideSwatchesByChild();
 	colorSwatchesByChild();
 	console.log("History " + historyIndex + " is: " + getCookie("colorHistory" + historyIndex));
@@ -255,8 +253,7 @@ function nextHistory(){
 	historyIndex++;
 	convertCookiesToHistory(historyIndex);
 	healHistory();
-	// hideSwatches();
-	showSwatches();
+	// showSwatches();
 	hideSwatchesByChild();
 	colorSwatchesByChild();
 	console.log("history index:" + historyIndex);

@@ -7,6 +7,10 @@ function checkIllustrator(){
   alert("Illustrator works");
 }
 
+
+// app.activeDocument = app.documents[0] // set to picture1.jpg
+// app.activeDocument = app.documents[1] // set to picture2.jpg
+
 var doc = app.activeDocument
 var isFill = app.isFillActive();
 var exist = app.documents.length > 0;

@@ -78,6 +78,11 @@ function assignSortable(){
 			console.log("old color is " + cutArray + ", from " + evt.oldIndex + " to " + evt.newIndex);
 			console.log("current history is: " + colorHistory);
 			updateHistory();
+			if (onSnip) {
+				var thisHandle = swatch[evt.newIndex].childNodes;
+				var thisSnip = thisHandle[1].childNodes;
+				thisSnip[0].style.display = "block";
+			}
 		};
 	});
 	Sortable.create(el, options);
@@ -301,7 +306,7 @@ function dimColor(newColor){
 			csInterface.evalScript(`lowerOpacity('${newColor}');`)
 			console.log(`higlighting ${newColor}`);
 		} else {
-			console.log(`Hovering over ${newColor}`);
+			// console.log(`Hovering over ${newColor}`);
 		}
 	}
 }
@@ -428,20 +433,18 @@ function hideSwatchesByChild() {
 
 function flipHandles(params){
 	for (var index = 0; index < maxNumber; index++) {
-		if (!params) {
-			swatch[index].style.justifyContent = "flex-end";
+		if (params) {
+			swatch[index].style.flexDirection = "row";
 			var currentHandle = swatch[index].childNodes;
-			currentHandle[0].style.justifyContent = "flex-end";
-			currentHandle[0].style.left = "6px";
-			currentHandle[1].style.left = "-12px";
-			console.log("true");
+			currentHandle[0].style.flexDirection = "row";
+			currentHandle[1].style.flexDirection = "row";
+			currentHandle[1].style.justifyContent = "flex-end";
 		} else {
-			swatch[index].style.justifyContent = "flex-start";
+			swatch[index].style.flexDirection = "row-reverse";
 			var currentHandle = swatch[index].childNodes;
-			currentHandle[0].style.justifyContent = "flex-start";
-			currentHandle[0].style.left = "1px";
-			currentHandle[1].style.left = "5px";
-			console.log("false");
+			currentHandle[0].style.flexDirection = "row-reverse";
+			currentHandle[1].style.flexDirection = "row";
+			currentHandle[1].style.justifyContent = "flex-start";
 		}
 	}
 }
@@ -452,6 +455,7 @@ function showSwatches() {
 	}
 }
 
+
 function addNewSwatch() {
 	swatch[(colorHistory.length)].style.display = "flex";
 }
@@ -460,13 +464,21 @@ function removeLastSwatch(location) {
 	swatch[(colorHistory.length + 1)].style.display = "none";
 }
 
-function colorSwatches() {
-	colorHistory.forEach(function(hexColor, index){
-		if (colorHistory.length > maxNumber)
-			colorHistory.pop();
-		var newSwatchColor = "#" + hexColor;
-		swatch[index].backgroundColor = newSwatchColor;
-	});
+// function colorSwatches() {
+// 	colorHistory.forEach(function(hexColor, index){
+// 		if (colorHistory.length > maxNumber)
+// 			colorHistory.pop();
+// 		var newSwatchColor = "#" + hexColor;
+// 		swatch[index].backgroundColor = newSwatchColor;
+// 	});
+// }
+
+function reCheckSnip() {
+	if (onSnip) {
+		var thisHandle = swatch[index].childNodes;
+		var thisSnip = thisHandle[1].childNodes;
+		thisSnip[0].style.display = "block";
+	}
 }
 
 function colorSwatchesByChild() {
@@ -479,5 +491,10 @@ function colorSwatchesByChild() {
 		swatch[index].style.backgroundColor = newSwatchColor;
 		swatch[index].style.display = "flex";
 		swatch[index].style.borderWidth = "0px";
+		if (onSnip) {
+			var thisHandle = swatch[index].childNodes;
+			var thisSnip = thisHandle[1].childNodes;
+			thisSnip[0].style.display = "block";
+		}
 	});
 }

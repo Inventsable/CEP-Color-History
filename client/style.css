@@ -115,6 +115,8 @@ ul {
 
 .swatch {
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
   border: 0px solid var(--idle-outline-color);
   background-color: var(--bg-color);
@@ -131,10 +133,12 @@ ul {
 
 .slider {
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: flex-start;
-  position: relative;
+  /* position: relative;
   bottom: 1px;
-  left: 1px;
+  left: 1px; */
   width: 40%;
   height: inherit;
   align-items: center;
@@ -142,19 +146,21 @@ ul {
 
 .sliderSnip {
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: flex-end;
-  position: relative;
+  /* position: relative;
   bottom: 1px;
-  left: 1px;
+  left: 1px; */
   width: 40%;
   height: inherit;
   align-items: center;
 }
 
 .handle {
-  position: relative;
+  /* position: relative;
   top: 1px;
-  right: 2px;
+  right: 2px; */
   width: 0%;
   height: inherit;
   background-color: transparent;
@@ -166,10 +172,10 @@ ul {
 }
 
 .handleSnip {
-  position: relative;
   border: 2px solid red;
+  /* position: relative;
   top: 1px;
-  left: -1px;
+  left: -1px; */
   width: 80%;
   height: inherit;
   background-color: transparent;
