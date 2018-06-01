@@ -95,8 +95,8 @@ ul {
 
 #foreground:hover, #background:hover {
   cursor: pointer;
-  background-color: var(--hover-color);
-  border-color: var(--hover-outline-color);
+  /* background-color: var(--hover-color);
+  border-color: var(--hover-outline-color); */
   border-radius: 10px;
 }
 

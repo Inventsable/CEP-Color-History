@@ -49,21 +49,13 @@ if (appName === "ILST") {
     \
     <MenuItem Label="---" /> \
     \
-    <MenuItem Id="refreshPanel" Label="Refresh panel" Enabled="true" Checked="false"/> \
-    <MenuItem Id="showHistory" Label="Log current history" Enabled="true" Checked="false"/> \
     <MenuItem Id="sortSpectrum" Label="Sort to spectrum" Enabled="true" Checked="false"/> \
-    <MenuItem Id="flipHandles" Label="Flip handles" Enabled="false" Checked="false"/> \
+    <MenuItem Id="flipHandles" Label="Flip handles" Enabled="true" Checked="false"/> \
     \
     <MenuItem Label="---" /> \
     \
-  	<MenuItem Id="resetThisCookie" Label="Reset this cookie" Enabled="false" Checked="false"/> \
+    <MenuItem Id="refreshPanel" Label="Refresh panel" Enabled="true" Checked="false"/> \
   	<MenuItem Id="resetAllCookies" Label="Reset all cookies" Enabled="true" Checked="false"/> \
-    <MenuItem Id="deleteAllCookies" Label="Delete all cookies" Enabled="true" Checked="false"/> \
-    \
-    <MenuItem Label="---" /> \
-    \
-    <MenuItem Id="SendAI" Label="Send to Illustrator" Enabled="false" Checked="false"/> \
-    <MenuItem Id="SendAE" Label="Send to After Effects" Enabled="false" Checked="false"/> \
   </Menu>';
 }
 
