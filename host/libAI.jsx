@@ -20,11 +20,11 @@ var switchNumber = 1;
 var allPaths = doc.pathItems.length;
 var allTexts = doc.textFrames.length;
 
+
 var selectedColors = [];
 var allColors = [];
 var prevOpacityTexts = [];
 var prevOpacityPaths = [];
-
 
 
 // checkForFill();
@@ -40,6 +40,12 @@ var prevOpacityPaths = [];
         // alert(strokeColorFromAI());
         // alert(fillColorFromAI());
                               // returns "00AA99"
+
+// alert(returnData());
+
+function returnData(){
+  return documents[0].layers.length;
+}
 
 
 function switchScanner() {
@@ -102,13 +108,13 @@ function getText(){
     for (var index = 0; index < allTexts; index++) {
       var fails = 0;
       for (var A_Index = 0; A_Index < text.length; A_Index++) {
-        if (doc.textFrames[index].contents !== text[A_Index]) {
+        if (documents[0].textFrames[index].contents !== text[A_Index]) {
           fails++;
         } else {
           break;
         }
         if (fails === text.length) {
-          text.push(doc.textFrames[index].contents);
+          text.push(documents[0].textFrames[index].contents);
         }
       }
     }
@@ -144,13 +150,13 @@ function hexToRgb(hex) {
 function rgbActiveHex(type, here) {
   var activeObject;
   if (type === "pathItems") {
-    if (doc.pathItems[here].stroked) {
-      activeObject = doc.pathItems[here].strokeColor
-    } else if (doc.pathItems[here].filled) {
-      activeObject = doc.pathItems[here].fillColor
+    if (documents[0].pathItems[here].stroked) {
+      activeObject = documents[0].pathItems[here].strokeColor
+    } else if (documents[0].pathItems[here].filled) {
+      activeObject = documents[0].pathItems[here].fillColor
     }
   } else if (type === "textFrames") {
-    activeObject = doc.textFrames[here].textRange.characterAttributes.fillColor
+    activeObject = documents[0].textFrames[here].textRange.characterAttributes.fillColor
   }
     var convertColor = rgbToHex(activeObject.red, activeObject.green, activeObject.blue);
     return convertColor;
@@ -176,12 +182,12 @@ function rgbActive(item, which, here) {
   var activeObject;
   if (item === "pathItems") {
     if (which === "stroke") {
-      activeObject = doc.pathItems[here].strokeColor
+      activeObject = documents[0].pathItems[here].strokeColor
     } else if (which === "fill") {
-      activeObject = doc.pathItems[here].fillColor
+      activeObject = documents[0].pathItems[here].fillColor
     }
   } else if (type === "textFrames") {
-    activeObject = doc.textFrames[here].textRange.characterAttributes.fillColor
+    activeObject = documents[0].textFrames[here].textRange.characterAttributes.fillColor
   }
     var convertColor = rgbToHex(activeObject.red, activeObject.green, activeObject.blue);
     return convertColor;
@@ -197,7 +203,7 @@ function rgbSelectedActive(item, which, here) {
       activeObject = app.selection[here].fillColor
     }
   } else if (type === "textFrames") {
-    activeObject = doc.textFrames[here].textRange.characterAttributes.fillColor
+    activeObject = documents[0].textFrames[here].textRange.characterAttributes.fillColor
   }
     var convertColor = rgbToHex(activeObject.red, activeObject.green, activeObject.blue);
     return convertColor;
@@ -222,7 +228,6 @@ function checkNew(params){
   } else {
     allColors.push(params)
   }
-// alert(allColors);
 }
 
 function checkSelected(params){
@@ -250,7 +255,6 @@ function checkSelected(params){
   } else {
     selectedColors.push(params)
   }
-// alert(selectedColors);
 }
 
 // alert(selectedArtColors());
@@ -262,12 +266,11 @@ function checkSelected(params){
 
 
 function selectedArtColors(){
-  // while (selectedColors.length > 0) {
-  //   selectedColors.pop();
-  // }
+  while (selectedColors.length > 0) {
+    selectedColors.pop();
+  }
   selectedColors = [];
   if (exist && app.selection.length > 0){
-    // alert(app.selection.length);
     for (var index = 0; index < app.selection.length; index++) {
       var currentSelection = app.selection[index];
       if ((currentSelection.stroked) && !(currentSelection.filled)) {
@@ -285,17 +288,17 @@ function selectedArtColors(){
 
 
 function allArtColors(){
-  // while (allColors.length > 0) {
-  //   allColors.pop();
-  // }
+  while (allColors.length > 0) {
+    allColors.pop();
+  }
   allColors = [];
   if (exist && hasPaths){
     for (var index = 0; index < allPaths; index++) {
-      if ((doc.pathItems[index].stroked) && !(doc.pathItems[index].filled)) {
+      if ((documents[0].pathItems[index].stroked) && !(documents[0].pathItems[index].filled)) {
         checkNew(rgbActive("pathItems", "stroke", index));
-      } else if ((doc.pathItems[index].filled) && !(doc.pathItems[index].stroked)) {
+      } else if ((documents[0].pathItems[index].filled) && !(documents[0].pathItems[index].stroked)) {
         checkNew(rgbActive("pathItems", "fill", index));
-      } else if ((doc.pathItems[index].filled) && (doc.pathItems[index].stroked)) {
+      } else if ((documents[0].pathItems[index].filled) && (documents[0].pathItems[index].stroked)) {
         checkNew(rgbActive("pathItems", "stroke", index));
         checkNew(rgbActive("pathItems", "fill", index));
       }
@@ -303,10 +306,6 @@ function allArtColors(){
   }
   return allColors;
 }
-
-// create function that receives flyoutmenu prompt in js
-// pop current colorHistory, replace with allColors, setCookie and updateHistory
-
 
 function lowerOpacity(exceptThis) {
   if (exist && hasPaths) {
@@ -318,20 +317,20 @@ function lowerOpacity(exceptThis) {
     }
     // Path Items
     for (var index = 0; index < allPaths; index++) {
-      prevOpacityPaths.push(doc.pathItems[index].opacity)
+      prevOpacityPaths.push(documents[0].pathItems[index].opacity)
       if (rgbActiveHex("pathItems", index) === exceptThis) {
-        doc.pathItems[index].opacity = 100;
+        documents[0].pathItems[index].opacity = 100;
       } else {
-        doc.pathItems[index].opacity = 20;
+        documents[0].pathItems[index].opacity = 20;
       }
     }
     // Text frames
     for (var index = 0; index < allTexts; index++) {
-      prevOpacityTexts.push(doc.textFrames[index].opacity)
+      prevOpacityTexts.push(documents[0].textFrames[index].opacity)
       if (rgbActiveHex("textFrames", index) === exceptThis) {
-        doc.textFrames[index].opacity = 100;
+        documents[0].textFrames[index].opacity = 100;
       } else {
-        doc.textFrames[index].opacity = 20;
+        documents[0].textFrames[index].opacity = 20;
       }
     }
     //
@@ -342,11 +341,11 @@ function returnOpacity() {
   if (exist && hasPaths) {
     for (var index = 0; index < allPaths; index++) {
       var previous = prevOpacityPaths[index];
-      doc.pathItems[index].opacity = prevOpacityPaths[index];
+      documents[0].pathItems[index].opacity = prevOpacityPaths[index];
     }
     for (var index = 0; index < allTexts; index++) {
       var previous = prevOpacityTexts[index];
-      doc.textFrames[index].opacity = prevOpacityTexts[index];
+      documents[0].textFrames[index].opacity = prevOpacityTexts[index];
     }
   }
 }

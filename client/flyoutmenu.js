@@ -19,12 +19,12 @@ var isScanning = true;
 window.onload = scanningToggle("On");
 var isSnip = false;
 window.onload = snippingToggle("Off");
-var isMove = true;
-window.onload = movingToggle("On");
+var isMove = false;
+window.onload = movingToggle("Off");
 
 if (appName === "ILST") {
   var menuXML = '<Menu> \
-    <MenuItem Id="moving" Label="Move on/off" Enabled="true" Checked="true"/> \
+    <MenuItem Id="moving" Label="Move on/off" Enabled="true" Checked="false"/> \
     <MenuItem Id="snipping" Label="Snip on/off" Enabled="true" Checked="false"/> \
     <MenuItem Id="scanning" Label="Scan on/off" Enabled="true" Checked="true"/> \
     <MenuItem Id="highlighting" Label="Highlight on/off" Enabled="false" Checked="false"/> \
@@ -38,6 +38,7 @@ if (appName === "ILST") {
     \
     <MenuItem Label="---" /> \
     \
+    <MenuItem Id="returnData" Label="Return data" Enabled="true" Checked="false"/> \
     <MenuItem Id="refreshPanel" Label="Refresh panel" Enabled="true" Checked="false"/> \
   	<MenuItem Id="resetAllCookies" Label="Reset all cookies" Enabled="true" Checked="false"/> \
   </Menu>';
@@ -62,12 +63,18 @@ if (appName === "ILST") {
 csInterface.setPanelFlyoutMenu(menuXML);
 csInterface.addEventListener("com.adobe.csxs.events.flyoutMenuClicked", setPanelCallback);
 
+function msgData(params){
+  console.log(params);
+}
+
 function setPanelCallback(event) {
   if (event.data.menuId == "resetAllCookies") {
     resetAllCookies();
     location.reload();
   } else if (event.data.menuId == "deleteAllCookies") {
     deleteAllCookies();
+  } else if (event.data.menuId == "returnData") {
+    csInterface.evalScript(`returnData()`, msgData);
   } else if (event.data.menuId == "resetThisCookie") {
     resetThisHistory();
   } else if (event.data.menuId == "refreshPanel") {

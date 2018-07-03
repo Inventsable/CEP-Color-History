@@ -78,11 +78,12 @@ function assignSortable(){
 			console.log("old color is " + cutArray + ", from " + evt.oldIndex + " to " + evt.newIndex);
 			console.log("current history is: " + colorHistory);
 			updateHistory();
-			if (onSnip) {
+			if (onSnip === true) {
 				var thisHandle = swatch[evt.newIndex].childNodes;
 				var thisSnip = thisHandle[1].childNodes;
 				thisSnip[0].style.display = "block";
 			}
+			reCheckSnip();
 		};
 	});
 	Sortable.create(el, options);
@@ -216,7 +217,6 @@ function snipAltClick(num){
 }
 
 function moveAltClick(num){
-	// if (!onHandle) {
 		if (appName === "PHXS") {
 			if (isOdd(groundState)){
 				csInterface.evalScript(`fgColorToPS('${colorHistory[num]}')`);
@@ -226,7 +226,6 @@ function moveAltClick(num){
 		} else if (appName === "ILST") {
 			csInterface.evalScript(`giveColor('${colorHistory[num]}')`);
 		}
-	// }
 }
 
 
@@ -268,8 +267,8 @@ function newColorFromPS(newColor){
 }
 
 function sendColor(newColor){
-	if (newColor.length > 6) {
-		return
+	if (!isHexColor(newColor)) {
+		return;
 	}
 	if (appName === "PHXS") {
 		newColor = newColor.toUpperCase();
@@ -313,7 +312,6 @@ function dimColor(newColor){
 
 
 function snippingToggle(params) {
-	// var swatch = document.getElementById('rowString').childNodes;
 	for (var index = 0; index < maxNumber; index++) {
 		var thisHandle = document.getElementsByClassName("handleSnip");
 		if (params === "On") {
@@ -331,7 +329,6 @@ function snippingToggle(params) {
 }
 
 function movingToggle(params) {
-	// var swatch = document.getElementById('rowString').childNodes;
 	for (var index = 0; index < maxNumber; index++) {
 		var thisHandle = document.getElementsByClassName("handle");
 		if (params === "On") {
@@ -457,28 +454,23 @@ function showSwatches() {
 
 
 function addNewSwatch() {
-	swatch[(colorHistory.length)].style.display = "flex";
+	if (colorHistory.length < maxNumber) {
+		swatch[(colorHistory.length)].style.display = "flex";
+	}
 }
 
 function removeLastSwatch(location) {
 	swatch[(colorHistory.length + 1)].style.display = "none";
 }
 
-// function colorSwatches() {
-// 	colorHistory.forEach(function(hexColor, index){
-// 		if (colorHistory.length > maxNumber)
-// 			colorHistory.pop();
-// 		var newSwatchColor = "#" + hexColor;
-// 		swatch[index].backgroundColor = newSwatchColor;
-// 	});
-// }
-
 function reCheckSnip() {
-	if (onSnip) {
-		var thisHandle = swatch[index].childNodes;
-		var thisSnip = thisHandle[1].childNodes;
-		thisSnip[0].style.display = "block";
-	}
+	colorHistory.forEach(function(hexColor, index){
+		if (onSnip) {
+			var thisHandle = swatch[index].childNodes;
+			var thisSnip = thisHandle[1].childNodes;
+			thisSnip[0].style.display = "block";
+		}
+	});
 }
 
 function colorSwatchesByChild() {

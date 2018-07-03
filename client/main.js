@@ -201,7 +201,12 @@ function appendColors(params) {
 			}
 		}
 	}
-	console.log(`new history is: ${colorHistory}`);
+	if (Array.isArray(colorHistory)) {
+		console.log(`new history is: ${colorHistory}`);
+	} else {
+		console.log("Failed to snatch colors.");
+		colorHistory = ["ffffff", "000000"]
+	}
 	updateHistory();
 }
 
@@ -218,6 +223,12 @@ function rewriteColors(params) {
 	}
 	console.log(`Snatched: ${colorHistory}`);
 	colorHistory = sortInSpectrum();
+	if (Array.isArray(colorHistory)) {
+		console.log(`new history is: ${colorHistory}`);
+	} else {
+		console.log("Failed to snatch all colors.");
+		colorHistory = ["ffffff", "000000"]
+	}
 	updateHistory();
 }
 
