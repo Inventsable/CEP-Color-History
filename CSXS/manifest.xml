@@ -48,11 +48,11 @@
               <Width>30</Width>
             </Size>
               <MinSize>
-                  <Height>120</Height>
+                  <Height>50</Height>
                   <Width>30</Width>
               </MinSize>
               <MaxSize>
-                  <Height>900</Height>
+                  <Height>400</Height>
                   <Width>50</Width>
               </MaxSize>
           </Geometry>

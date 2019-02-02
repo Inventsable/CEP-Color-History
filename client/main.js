@@ -55,6 +55,12 @@ var csInterface = new CSInterface();
 	window.onload = assignByApp();
 	window.onload = loadLibraries();
 
+	csInterface.addEventListener('documentAfterActivate', reset);
+
+	function reset(){
+		location.reload();
+	}
+
 ////////////////////////////////////
 
 // head ////////////////////////////
