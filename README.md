@@ -1,5 +1,5 @@
 # v1.0 is deprecated
-## See protoColors rebuild here
+## [See protoColors rebuild here](https://github.com/Inventsable/protoColors)
 
 ~~This is a prototype Color History panel for Illustrator and Photoshop. It's fully functional, storing any recent colors in persistent cookies and applying to selection, with additional features like snipping, click and drag reordering, snatching all current artboard colors, and a very limited Hightlight Color function:~~
 
